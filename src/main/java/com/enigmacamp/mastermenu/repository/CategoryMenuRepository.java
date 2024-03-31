@@ -11,9 +11,6 @@ import java.util.List;
 @Repository
 public interface CategoryMenuRepository extends JpaRepository<CategoryMenu, String> {
 
-//    @Query("Delete from CategoryMenu c where c.id = :category_id")
-//    void deleteCategoryMenu(@Param("category_id") String category_id);
-
     @Query("Select c from CategoryMenu c where c.deleted = false")
     List<CategoryMenu> getAllCategoryMenu();
 

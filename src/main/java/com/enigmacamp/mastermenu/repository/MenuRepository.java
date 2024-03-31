@@ -20,6 +20,4 @@ public interface MenuRepository extends JpaRepository<Menu, String> {
     @Query("Select m from Menu m where m.deleted = false and m.id = :menu_id")
     Menu findMenuByDeletedFalse(@Param("menu_id") String menu_id);
 
-//    @Query("Delete from Menu m where m.id = :menu_id")
-//    void deleteMenu(@Param("menu_id") String menu_id);
 }

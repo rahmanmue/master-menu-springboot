@@ -19,6 +19,4 @@ public interface EmployeeRepository extends JpaRepository<Employee, String> {
     @Query("Select e from Employee e where e.deleted = false and e.nip = :nip")
     Employee getEmployeeByNip(@Param("nip") String nip);
 
-//    @Query("Delete from Employee e where e.id = :employee_id")
-//    void deleteEmployee(@Param("employee_id") String employee_id);
 }
