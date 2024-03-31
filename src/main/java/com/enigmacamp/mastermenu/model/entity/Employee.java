@@ -2,6 +2,7 @@ package com.enigmacamp.mastermenu.model.entity;
 
 import com.enigmacamp.mastermenu.utils.enums.EGender;
 import com.fasterxml.jackson.annotation.JsonFormat;
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
@@ -38,6 +39,7 @@ public class Employee {
     private EGender gender;
     private String phone;
     private String address;
+    @JsonIgnore
     private boolean deleted = Boolean.FALSE;
 
 //    @OneToOne

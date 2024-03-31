@@ -2,6 +2,7 @@ package com.enigmacamp.mastermenu.model.entity;
 
 import com.enigmacamp.mastermenu.utils.enums.EGender;
 import com.fasterxml.jackson.annotation.JsonFormat;
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
@@ -35,6 +36,7 @@ public class Customer {
     @Enumerated(EnumType.STRING)
     @Column(name = "gender")
     private EGender gender;
+    @JsonIgnore
     private boolean deleted = Boolean.FALSE;
 
 //    join

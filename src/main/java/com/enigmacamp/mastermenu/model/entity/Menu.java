@@ -1,5 +1,6 @@
 package com.enigmacamp.mastermenu.model.entity;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
@@ -27,6 +28,7 @@ public class Menu {
     private Integer price;
     private Integer stock;
     // private String image;
+    @JsonIgnore
     private boolean deleted = Boolean.FALSE;
 
     // join

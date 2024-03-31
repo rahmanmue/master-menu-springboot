@@ -1,6 +1,7 @@
 package com.enigmacamp.mastermenu.model.entity;
 
 import com.fasterxml.jackson.annotation.JsonFormat;
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
@@ -35,6 +36,7 @@ public class Transaction {
     @Column(name = "total_item")
     private Integer totalItem;
 
+    @JsonIgnore
     private boolean deleted = Boolean.FALSE;
 
     @ManyToOne

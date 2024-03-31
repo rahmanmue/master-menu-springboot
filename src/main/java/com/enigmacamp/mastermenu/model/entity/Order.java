@@ -2,6 +2,7 @@ package com.enigmacamp.mastermenu.model.entity;
 
 import com.enigmacamp.mastermenu.utils.enums.EOrderStatus;
 import com.fasterxml.jackson.annotation.JsonFormat;
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
@@ -37,6 +38,7 @@ public class Order {
     @Column(name = "status")
     private EOrderStatus status;
 
+    @JsonIgnore
     private boolean deleted = Boolean.FALSE;
 
     // join

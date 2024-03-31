@@ -1,5 +1,6 @@
 package com.enigmacamp.mastermenu.model.entity;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
@@ -24,5 +25,6 @@ public class CategoryMenu {
     private String id;
     private String name;
     private String description;
+    @JsonIgnore
     private boolean deleted = Boolean.FALSE;
 }
