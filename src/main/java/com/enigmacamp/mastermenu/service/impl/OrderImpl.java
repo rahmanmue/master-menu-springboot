@@ -45,7 +45,7 @@ public class OrderImpl implements OrderService {
     @Override
     public void deleteOrder(String id) {
         if (orderRepository.findOrderByDeletedFalse(id) != null) {
-            orderRepository.deleteOrder(id);
+            orderRepository.deleteById(id);
         } else {
             throw new RuntimeException("Order with id "+id+" Not Found");
         }
