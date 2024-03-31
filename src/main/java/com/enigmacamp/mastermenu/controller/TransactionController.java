@@ -31,4 +31,14 @@ public class TransactionController {
         return transactionService.createTransaction(transactionReq);
     }
 
+    @PutMapping
+    public Transaction updateTransaction(@RequestBody TransactionReq transactionReq) {
+        return transactionService.updateTransaction(transactionReq);
+    }
+
+    @DeleteMapping("/{id}")
+    public void deleteTransaction(@PathVariable String id) {
+        transactionService.deleteTransaction(id);
+    }
+
 }

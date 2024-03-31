@@ -30,9 +30,8 @@ public class Order {
     @Column(name = "order_id")
     private String id;
 
-    // get data now
     @JsonFormat(pattern = "yyyy-MM-dd", timezone = "GMT+7")
-    private LocalDate date = LocalDate.now();
+    private Date date = java.sql.Date.valueOf(LocalDate.now());
 
     @Enumerated(EnumType.STRING)
     @Column(name = "status")

@@ -4,6 +4,7 @@ import lombok.Data;
 
 @Data
 public class TransactionDetailReq {
-    private String MenuId;
+    private String id;
+    private String menuId;
     private Integer quantity;
 }

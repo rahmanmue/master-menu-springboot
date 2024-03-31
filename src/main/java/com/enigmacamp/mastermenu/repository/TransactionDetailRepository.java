@@ -13,7 +13,7 @@ public interface TransactionDetailRepository extends JpaRepository<TransactionDe
     @Query("Select t from TransactionDetail t where t.deleted = false")
     List<TransactionDetailRepository> getAllTransactionDetail();
 
-    @Query("Select t from TransactionDetail t where t.deleted = false and t.id = : transaction_detail_id")
+    @Query("Select t from TransactionDetail t where t.deleted = false and t.id = :transaction_detail_id")
     TransactionDetail getTransactionDetailById(@Param("transaction_detail_id") String transaction_detail_id);
 
 }

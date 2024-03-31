@@ -12,10 +12,10 @@ public interface TransactionService {
     @Transactional
     Transaction createTransaction(TransactionReq transactionReq);
     @Transactional
-    Transaction updateTransaction(Transaction transaction);
+    Transaction updateTransaction(TransactionReq transactionReq);
     List<Transaction> getAllTransaction();
     Transaction getTransactionById(String id);
-    void deleteTransaction(Transaction transaction);
+    void deleteTransaction(String id);
 
 
 }

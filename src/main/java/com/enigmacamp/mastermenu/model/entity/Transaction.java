@@ -1,5 +1,6 @@
 package com.enigmacamp.mastermenu.model.entity;
 
+import com.fasterxml.jackson.annotation.JsonFormat;
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
@@ -26,6 +27,7 @@ public class Transaction {
     @Column(name = "transaction_id")
     private String id;
 
+    @JsonFormat(pattern = "yyyy-MM-dd", timezone = "GMT+7")
     @Column(name = "transaction_date")
     private Date transactionDate;
     @Column(name = "total_price")
