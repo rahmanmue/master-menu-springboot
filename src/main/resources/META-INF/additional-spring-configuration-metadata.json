@@ -1,0 +1,24 @@
+{
+  "properties": [
+    {
+      "name": "spring.jpa.proporties.hibernate.dialect",
+      "type": "java.lang.String",
+      "description": "A description for 'spring.jpa.proporties.hibernate.dialect'"
+    },
+    {
+      "name": "aws.accessKey",
+      "type": "java.lang.String",
+      "description": "A description for 'aws.accessKey'"
+    },
+    {
+      "name": "aws.secretKey",
+      "type": "java.lang.String",
+      "description": "A description for 'aws.secretKey'"
+    },
+    {
+      "name": "aws.bucket.name",
+      "type": "java.lang.String",
+      "description": "A description for 'aws.bucket.name'"
+    }
+  ]
+}
