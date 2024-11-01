@@ -14,8 +14,8 @@ public interface MenuRepository extends JpaRepository<Menu, String> {
     @Query("Select m from Menu m where m.deleted = false")
     List<Menu> getAllMenu();
 
-    @Query("Select m from Menu m where m.deleted = false and m.categoryMenu.id = :category_id")
-    List<Menu> getAllMenuByCategory(@Param("category_id") String category_id);
+    @Query("Select m from Menu m where m.deleted = false and LOWER(m.categoryMenu.name) LIKE LOWER(CONCAT('%',:categoryName, '%'))")
+    List<Menu> getAllMenuByCategoryName(@Param("categoryName") String categoryName);
 
     @Query("Select m from Menu m where m.deleted = false and m.id = :menu_id")
     Menu findMenuByDeletedFalse(@Param("menu_id") String menu_id);

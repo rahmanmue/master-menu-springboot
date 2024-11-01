@@ -13,6 +13,9 @@ public interface CustomerRepository extends JpaRepository<Customer, String> {
     @Query("Select c from Customer c where c.deleted = false")
     List<Customer> getAllCustomer();
 
+    @Query("Select c from Customer c where c.deleted = false and LOWER(c.fullName) LIKE LOWER(CONCAT('%',:customer_name,'%'))")
+    List<Customer> getAllCustomerByName(@Param("customer_name") String customer_name);
+
     @Query("Select c from Customer c where c.deleted = false and c.id = :customer_id")
     Customer findCustomerByDeletedFalse(@Param("customer_id") String customer_id);
 
