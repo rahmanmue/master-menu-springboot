@@ -1,36 +1,61 @@
 package com.enigmacamp.mastermenu.service.impl;
 
+import com.enigmacamp.mastermenu.model.dto.request.MenuReq;
+import com.enigmacamp.mastermenu.model.dto.response.MenuDetailRes;
+import com.enigmacamp.mastermenu.model.dto.response.MenuRes;
+import com.enigmacamp.mastermenu.model.entity.CategoryMenu;
 import com.enigmacamp.mastermenu.model.entity.Menu;
 import com.enigmacamp.mastermenu.repository.MenuRepository;
 import com.enigmacamp.mastermenu.service.MenuService;
+
+import jakarta.persistence.EntityNotFoundException;
 import lombok.RequiredArgsConstructor;
+
+import org.modelmapper.ModelMapper;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
-import java.util.stream.Collectors;
 
 @Service
 @RequiredArgsConstructor
 public class MenuImpl implements MenuService {
 
     private final MenuRepository menuRepository;
+    private final ModelMapper modelMapper;
+
     @Override
-    public Menu createMenu(Menu menu) {
-        return menuRepository.save(menu);
+    public MenuRes createMenu(MenuReq menuReq) {
+        Menu menu = modelMapper.map(menuReq, Menu.class);
+        CategoryMenu categoryMenu = CategoryMenu.builder().id(menuReq.getCategoryId()).build();
+        menu.setCategoryMenu(categoryMenu);
+        Menu saved =  menuRepository.save(menu);
+        return modelMapper.map(saved, MenuRes.class);
     }
 
     @Override
-    public Menu getMenuById(String id) {
-        return menuRepository.findMenuByDeletedFalse(id);
-    }
+    public MenuDetailRes getMenuById(String id) {
+        Menu menu = menuRepository.findMenuByDeletedFalse(id);
 
-    @Override
-    public Menu updateMenu(Menu menu) {
-        if(menuRepository.findMenuByDeletedFalse(menu.getId()) != null){
-            return menuRepository.save(menu);
-        }else{
-            throw new RuntimeException("Menu with id "+menu.getId()+" Not Found");
+        if (menu == null) {
+            throw new EntityNotFoundException("Menu with id " + id + " not found");
         }
+
+        return modelMapper.map(menu, MenuDetailRes.class);
+    }
+
+    @Override
+    public MenuRes updateMenu(MenuReq menuReq) {
+        Menu existingMenu = menuRepository.findMenuByDeletedFalse(menuReq.getId());
+
+        if(existingMenu == null){
+            throw new RuntimeException("Menu with id "+ menuReq.getId()+" Not Found");
+        }
+
+        modelMapper.map(menuReq, existingMenu);
+
+        Menu updatedMenu = menuRepository.save(existingMenu);
+
+        return modelMapper.map(updatedMenu, MenuRes.class);
     }
 
     @Override
@@ -43,17 +68,18 @@ public class MenuImpl implements MenuService {
     }
 
     @Override
-    public List<Menu> getAllMenu() {
-        return menuRepository.getAllMenu();
+    public List<MenuDetailRes> getAllMenu() {
+        List<Menu> menus = menuRepository.getAllMenu();
+
+        return menus.stream()
+            .map(menu -> modelMapper.map(menu, MenuDetailRes.class))
+            .toList();
     }
 
     @Override
-    public List<Menu> getAllMenuByCategory(String category) {
-        List<Menu> menuListByCategoryName = menuRepository.getAllMenu().stream()
-                .filter(menu -> menu.getCategoryMenu().getName().equalsIgnoreCase(category))
+    public List<MenuDetailRes> getAllMenuByCategory(String category) {
+        return menuRepository.getAllMenuByCategoryName(category).stream()
+                .map(menu -> modelMapper.map(menu, MenuDetailRes.class))
                 .toList();
-
-
-        return menuListByCategoryName;
     }
 }

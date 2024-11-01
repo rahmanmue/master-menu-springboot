@@ -1,17 +1,20 @@
 package com.enigmacamp.mastermenu.service;
 
-import com.enigmacamp.mastermenu.model.entity.Employee;
+import com.enigmacamp.mastermenu.model.dto.request.EmployeeReq;
+import com.enigmacamp.mastermenu.model.dto.response.EmployeeDetailRes;
+import com.enigmacamp.mastermenu.model.dto.response.EmployeeRes;
 
 import java.util.List;
 
 public interface EmployeeService {
 
-    Employee saveEmployee(Employee employee);
-    Employee updateEmployee(Employee employee);
-    List<Employee> getAllEmployee();
-    Employee getEmployeeById(String id);
-    Employee getEmployeeByNip(String nip);
+    EmployeeRes saveEmployee(EmployeeReq employeeReq);
+    EmployeeRes updateEmployee(EmployeeReq employeeReq);
+    List<EmployeeDetailRes> getAllEmployee();
+    EmployeeDetailRes getEmployeeById(String id);
+    EmployeeDetailRes getEmployeeByNip(String nip);
     void deleteEmployee(String id);
-    List<Employee> getEmployeeByPosition(String position);
+    List<EmployeeDetailRes> getEmployeeByPosition(String position);
+    List<EmployeeDetailRes> getEmployeeByName(String name);
 
 }

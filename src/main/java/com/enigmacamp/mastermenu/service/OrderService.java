@@ -1,19 +1,17 @@
 package com.enigmacamp.mastermenu.service;
 
-import com.enigmacamp.mastermenu.model.entity.Order;
+import com.enigmacamp.mastermenu.model.dto.request.OrderReq;
+import com.enigmacamp.mastermenu.model.dto.response.OrderDetailRes;
+import com.enigmacamp.mastermenu.model.dto.response.OrderRes;
 
 import java.util.List;
 
 public interface OrderService {
-    List<Order> getAllOrder();
-    List<Order> getOrderByCustomerId(String customerId);
-    Order getOrderById(String id);
-
-    Order createOrder(Order order);
-
-    Order updateOrder(Order order);
-
-    void deleteOrder(String id);
-
-    List<Order> getOrderByStatus(String status);
+    List<OrderDetailRes> getAllOrder();
+    List<OrderDetailRes> getOrderByCustomerId(String customerId);
+    OrderDetailRes getOrderById(String id);
+    // OrderRes createOrder(OrderReq orderReq);
+    OrderRes updateOrder(OrderReq order);
+    // void deleteOrder(String id);
+    List<OrderDetailRes> getOrderByStatus(String status);
 }

@@ -2,7 +2,6 @@ package com.enigmacamp.mastermenu.service;
 
 import com.enigmacamp.mastermenu.model.entity.TransactionDetail;
 
-import java.util.List;
 
 public interface TransactionDetailService {
 
