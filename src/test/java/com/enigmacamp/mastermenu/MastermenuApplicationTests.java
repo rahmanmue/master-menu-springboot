@@ -8,6 +8,7 @@ class MastermenuApplicationTests {
 
 	@Test
 	void contextLoads() {
+		// Test context loading
 	}
 
 }
