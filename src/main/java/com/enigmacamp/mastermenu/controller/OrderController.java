@@ -1,9 +1,17 @@
 package com.enigmacamp.mastermenu.controller;
 
-import com.enigmacamp.mastermenu.model.entity.Order;
+import com.enigmacamp.mastermenu.model.dto.ApiResponse;
+import com.enigmacamp.mastermenu.model.dto.request.OrderReq;
+import com.enigmacamp.mastermenu.model.dto.response.OrderDetailRes;
+import com.enigmacamp.mastermenu.model.dto.response.OrderRes;
 import com.enigmacamp.mastermenu.service.OrderService;
 import com.enigmacamp.mastermenu.utils.constant.ApiPathConstant;
+
+import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
+
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -16,38 +24,101 @@ public class OrderController {
     private final OrderService orderService;
 
     @GetMapping
-    public List<Order> getAllOrder() {
-        return orderService.getAllOrder();
+    public ResponseEntity<ApiResponse<List<OrderDetailRes>>> getAllOrder() {
+        return new ResponseEntity<>(
+            ApiResponse.<List<OrderDetailRes>>builder()
+                .statusCode(HttpStatus.OK.value())
+                .message("Success")
+                .data(orderService.getAllOrder())
+                .build(),
+                HttpStatus.OK      
+            );
     }
 
     @GetMapping("/status")
-    public List<Order> getAllOrderByStatus(@RequestParam(name = "status") String status) {
-        return orderService.getOrderByStatus(status.toUpperCase());
+    public ResponseEntity<ApiResponse<List<OrderDetailRes>>> getAllOrderByStatus(@RequestParam(name = "status") String status) {
+        List<OrderDetailRes> orders = orderService.getOrderByStatus(status.toUpperCase());
+        return new ResponseEntity<>(
+            ApiResponse.<List<OrderDetailRes>>builder()
+                .statusCode(HttpStatus.OK.value())
+                .message("Success retrivied data")
+                .data(orders)
+                .build(),
+                HttpStatus.OK      
+            );
     }
 
     @GetMapping("/customer")
-    public List<Order> getOrderByCustomerId(@RequestParam(name = "customer_id") String customer_id) {
-        return orderService.getOrderByCustomerId(customer_id);
-    }
-    @GetMapping("/{id}")
-    public Order getOrderById(@PathVariable String id) {
-        return orderService.getOrderById(id);
+    public ResponseEntity<ApiResponse<List<OrderDetailRes>>> getOrderByCustomerId(@RequestParam(name = "customerId") String customerId) {
+        List<OrderDetailRes> orders = orderService.getOrderByCustomerId(customerId);
+        return new ResponseEntity<>(
+            ApiResponse.<List<OrderDetailRes>>builder()
+                .statusCode(HttpStatus.OK.value())
+                .message("Success retrivied data")
+                .data(orders)
+                .build(),
+                HttpStatus.OK      
+            );
     }
 
-    @PostMapping
-    public Order createOrder(@RequestBody Order order) {
-        return orderService.createOrder(order);
+
+    @GetMapping("/{id}")
+    public ResponseEntity<ApiResponse<OrderDetailRes>> getOrderById(@PathVariable String id) {
+        OrderDetailRes order = orderService.getOrderById(id);
+
+        return new ResponseEntity<>(
+            ApiResponse.<OrderDetailRes>builder()
+                .statusCode(HttpStatus.OK.value())
+                .message("Success retrivied data")
+                .data(order)
+                .build(),
+                HttpStatus.OK      
+            );
     }
 
     @PutMapping
-    public Order updateOrder(@RequestBody Order order) {
-        return orderService.updateOrder(order);
+    public ResponseEntity<ApiResponse<OrderRes>> updateOrder(@Valid @RequestBody OrderReq orderReq) {
+        OrderRes updated = orderService.updateOrder(orderReq);
+
+        return new ResponseEntity<>(
+            ApiResponse.<OrderRes>builder()
+                .statusCode(HttpStatus.OK.value())
+                .message("Order updated successfully")
+                .data(updated)
+                .build(),
+                HttpStatus.OK      
+            );
     }
 
-    @DeleteMapping("/{id}")
-    public void deleteOrder(@PathVariable String id) {
-        orderService.deleteOrder(id);
-    }
+    // @PostMapping
+    // public ResponseEntity<ApiResponse<OrderRes>> createOrder(@Valid @RequestBody OrderReq orderReq) {
+    //     OrderRes saved = orderService.createOrder(orderReq);
+
+    //     return new ResponseEntity<>(
+    //         ApiResponse.<OrderRes>builder()
+    //             .statusCode(HttpStatus.CREATED.value())
+    //             .message("Order created successfully")
+    //             .data(saved)
+    //             .build(),
+    //             HttpStatus.CREATED      
+    //         );
+    // }
+
+  
+
+    // @DeleteMapping("/{id}")
+    // public ResponseEntity<ApiResponse<String>> deleteOrder(@PathVariable String id) {
+    //     orderService.deleteOrder(id);
+
+    //     return new ResponseEntity<>(
+    //         ApiResponse.<String>builder()
+    //             .statusCode(HttpStatus.OK.value())
+    //             .message("Order deleted sucessfully")
+    //             .data("Order with id "+ id + " has been deleted")
+    //             .build(),
+    //         HttpStatus.OK
+    //     );
+    // }
 
 
 }
