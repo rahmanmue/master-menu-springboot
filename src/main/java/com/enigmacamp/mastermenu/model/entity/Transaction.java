@@ -10,6 +10,7 @@ import lombok.Data;
 import lombok.NoArgsConstructor;
 import org.hibernate.annotations.SQLDelete;
 
+import java.time.LocalDateTime;
 import java.util.Date;
 import java.util.List;
 
@@ -54,5 +55,27 @@ public class Transaction {
     @OneToMany(mappedBy = "transaction")
     @JsonIgnoreProperties("transaction")
     private List<TransactionDetail> transactionDetail;
+
+    @Column(name= "created_at", nullable = false, updatable = false)
+    private LocalDateTime createdAt;
+
+    @Column(name="updated_at")
+    private LocalDateTime updatedAt;
+
+    @PrePersist
+    protected void onCreate(){
+        createdAt = LocalDateTime.now();
+        updatedAt = createdAt;
+    }
+
+    @PreUpdate 
+    protected void onUpdate(){
+        updatedAt = LocalDateTime.now();
+    }  
+    
+    @PreRemove
+    protected void onDelete(){
+        updatedAt = LocalDateTime.now();
+    }
 
 }

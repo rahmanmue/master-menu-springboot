@@ -10,6 +10,7 @@ import lombok.Data;
 import lombok.NoArgsConstructor;
 import org.hibernate.annotations.SQLDelete;
 
+import java.time.LocalDateTime;
 import java.util.Date;
 
 @Entity
@@ -38,6 +39,28 @@ public class Customer {
     private EGender gender;
     @JsonIgnore
     private boolean deleted = Boolean.FALSE;
+
+    @Column(name= "created_at", nullable = false, updatable = false)
+    private LocalDateTime createdAt;
+
+    @Column(name="updated_at")
+    private LocalDateTime updatedAt;
+
+    @PrePersist
+    protected void onCreate(){
+        createdAt = LocalDateTime.now();
+        updatedAt = createdAt;
+    }
+
+    @PreUpdate 
+    protected void onUpdate(){
+        updatedAt = LocalDateTime.now();
+    }  
+    
+    @PreRemove
+    protected void onDelete(){
+        updatedAt = LocalDateTime.now();
+    }
 
 //    join
 //    @OneToOne

@@ -1,5 +1,7 @@
 package com.enigmacamp.mastermenu.model.entity;
 
+import java.time.LocalDateTime;
+
 import com.enigmacamp.mastermenu.utils.enums.ERole;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
@@ -22,4 +24,27 @@ public class Role {
     @Enumerated(EnumType.STRING)
     @Column(name = "role")
     private ERole role;
+
+    @Column(name= "created_at", nullable = false, updatable = false)
+    private LocalDateTime createdAt;
+
+    @Column(name="updated_at")
+    private LocalDateTime updatedAt;
+
+    @PrePersist
+    protected void onCreate(){
+        createdAt = LocalDateTime.now();
+        updatedAt = createdAt;
+    }
+
+    @PreUpdate 
+    protected void onUpdate(){
+        updatedAt = LocalDateTime.now();
+    }  
+    
+    @PreRemove
+    protected void onDelete(){
+        updatedAt = LocalDateTime.now();
+    }
+    
 }

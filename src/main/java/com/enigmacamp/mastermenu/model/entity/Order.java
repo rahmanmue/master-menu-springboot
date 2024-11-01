@@ -11,6 +11,7 @@ import lombok.NoArgsConstructor;
 import org.hibernate.annotations.SQLDelete;
 
 import java.time.LocalDate;
+import java.time.LocalDateTime;
 import java.util.Date;
 
 import static java.util.Date.*;
@@ -32,7 +33,7 @@ public class Order {
     private String id;
 
     @JsonFormat(pattern = "yyyy-MM-dd", timezone = "GMT+7")
-    private Date date = java.sql.Date.valueOf(LocalDate.now());
+    private Date date;
 
     @Enumerated(EnumType.STRING)
     @Column(name = "status")
@@ -45,4 +46,30 @@ public class Order {
     @ManyToOne
     @JoinColumn(name = "customer_id")
     private Customer customer;
+
+
+    @Column(name= "created_at", nullable = false, updatable = false)
+    private LocalDateTime createdAt;
+
+    @Column(name="updated_at")
+    private LocalDateTime updatedAt;
+
+    @PrePersist
+    protected void onCreate(){
+        if (date == null) {
+            date = new Date();
+        }
+        createdAt = LocalDateTime.now();
+        updatedAt = createdAt;
+    }
+
+    @PreUpdate 
+    protected void onUpdate(){
+        updatedAt = LocalDateTime.now();
+    }  
+    
+    @PreRemove
+    protected void onDelete(){
+        updatedAt = LocalDateTime.now();
+    }
 }

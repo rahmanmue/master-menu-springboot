@@ -6,6 +6,9 @@ import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
+
+import java.time.LocalDateTime;
+
 import org.hibernate.annotations.SQLDelete;
 
 @Entity
@@ -27,7 +30,7 @@ public class Menu {
     private String description;
     private Integer price;
     private Integer stock;
-    // private String image;
+    private String imageUrl;
     @JsonIgnore
     private boolean deleted = Boolean.FALSE;
 
@@ -35,5 +38,27 @@ public class Menu {
     @ManyToOne
     @JoinColumn(name = "category_id")
     private CategoryMenu categoryMenu;
+
+    @Column(name= "created_at", nullable = false, updatable = false)
+    private LocalDateTime createdAt;
+
+    @Column(name="updated_at")
+    private LocalDateTime updatedAt;
+
+    @PrePersist
+    protected void onCreate(){
+        createdAt = LocalDateTime.now();
+        updatedAt = createdAt;
+    }
+
+    @PreUpdate 
+    protected void onUpdate(){
+        updatedAt = LocalDateTime.now();
+    }  
+    
+    @PreRemove
+    protected void onDelete(){
+        updatedAt = LocalDateTime.now();
+    }
 
 }
