@@ -2,6 +2,9 @@ package com.enigmacamp.mastermenu.model.entity;
 
 import java.time.LocalDateTime;
 
+import org.hibernate.annotations.CreationTimestamp;
+import org.hibernate.annotations.UpdateTimestamp;
+
 import com.enigmacamp.mastermenu.utils.enums.ERole;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
@@ -22,29 +25,17 @@ public class Role {
     private String id;
 
     @Enumerated(EnumType.STRING)
-    @Column(name = "role")
-    private ERole role;
+    @Column(name = "name")
+    private ERole name;
 
+    @CreationTimestamp
     @Column(name= "created_at", nullable = false, updatable = false)
     private LocalDateTime createdAt;
 
+    @UpdateTimestamp
     @Column(name="updated_at")
     private LocalDateTime updatedAt;
 
-    @PrePersist
-    protected void onCreate(){
-        createdAt = LocalDateTime.now();
-        updatedAt = createdAt;
-    }
-
-    @PreUpdate 
-    protected void onUpdate(){
-        updatedAt = LocalDateTime.now();
-    }  
     
-    @PreRemove
-    protected void onDelete(){
-        updatedAt = LocalDateTime.now();
-    }
-    
+     
 }

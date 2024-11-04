@@ -28,7 +28,7 @@ public class Employee {
     @GeneratedValue(strategy = GenerationType.UUID)
     @Column(name = "employee_id")
     private String id;
-    @Column(nullable = false, unique = true)
+    @Column(unique = true)
     private String nip;
     private EPosition position;
     @Column(name="full_name")
@@ -66,7 +66,7 @@ public class Employee {
         updatedAt = LocalDateTime.now();
     }
 
-//    @OneToOne
-//    @JoinColumn(name = "user_id")
-//    private User user;
+    @OneToOne
+    @JoinColumn(name = "user_id")
+    private User user;
 }

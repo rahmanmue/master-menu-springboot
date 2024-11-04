@@ -62,8 +62,8 @@ public class Customer {
         updatedAt = LocalDateTime.now();
     }
 
-//    join
-//    @OneToOne
-//    @JoinColumn(name = "user_id")
-//    private User user;
+    //join
+    @OneToOne
+    @JoinColumn(name = "user_id")
+    private User user;
 }
