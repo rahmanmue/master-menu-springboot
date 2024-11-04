@@ -13,6 +13,7 @@ import lombok.RequiredArgsConstructor;
 
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -68,6 +69,7 @@ public class MenuController {
     }
 
     @PostMapping
+    @PreAuthorize("hasRole('ADMIN')")
     public ResponseEntity<ApiResponse<MenuRes>> createMenu(
         @RequestParam("file") MultipartFile file,
         @ModelAttribute @Valid MenuReq menuReq) {
@@ -87,6 +89,7 @@ public class MenuController {
     }
 
     @PutMapping
+    @PreAuthorize("hasRole('ADMIN')")
     public ResponseEntity<ApiResponse<MenuRes>> updateMenu(
         @RequestParam("file") MultipartFile file,
         @ModelAttribute @Valid MenuReq menuReq) {
@@ -106,6 +109,7 @@ public class MenuController {
     }
 
     @DeleteMapping("/{id}")
+    @PreAuthorize("hasRole('ADMIN')")
     public ResponseEntity<ApiResponse<String>> deleteMenu(@PathVariable String id) {
         
         String imageUrl = menuService.getMenuById(id).getImageUrl();

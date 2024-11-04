@@ -12,6 +12,7 @@ import lombok.RequiredArgsConstructor;
 
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -65,6 +66,7 @@ public class CategoryMenuController {
     }
 
     @PostMapping
+    @PreAuthorize("hasRole('ADMIN')")
     public ResponseEntity<ApiResponse<CategoryMenuRes>> saveCategoryMenu(@Valid @RequestBody CategoryMenuReq categoryMenuReq) {
         CategoryMenuRes savedCategory =  categoryMenuService.saveCategoryMenu(categoryMenuReq); 
         
@@ -79,6 +81,7 @@ public class CategoryMenuController {
     }
 
     @PutMapping
+    @PreAuthorize("hasRole('ADMIN')")
     public ResponseEntity<ApiResponse<CategoryMenuRes>> updateCategoryMenu(@Valid @RequestBody CategoryMenuReq categoryMenuReq) {
         CategoryMenuRes updatedCategory = categoryMenuService.updateCategoryMenu(categoryMenuReq);
 
@@ -93,6 +96,7 @@ public class CategoryMenuController {
     }
 
     @DeleteMapping("/{id}")
+    @PreAuthorize("hasRole('ADMIN')")
     public ResponseEntity<ApiResponse<String>> deleteCategoryMenu(@PathVariable String id) {
         categoryMenuService.deleteCategoryMenu(id);
 
