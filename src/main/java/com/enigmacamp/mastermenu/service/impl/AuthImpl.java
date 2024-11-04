@@ -4,7 +4,6 @@ import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
 
-import org.modelmapper.ModelMapper;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.crypto.password.PasswordEncoder;
@@ -38,7 +37,6 @@ public class AuthImpl implements AuthService {
     private final EmployeeRepository employeeRepository;
     private final CustomerRepository customerRepository;
     private final JwtService jwtService;
-    private final ModelMapper modelMapper;
 
     @Override
     public RegisterRes signUp(RegisterUserReq input){

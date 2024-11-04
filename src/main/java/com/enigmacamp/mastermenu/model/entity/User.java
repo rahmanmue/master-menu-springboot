@@ -23,11 +23,9 @@ import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.NoArgsConstructor;
 
-import java.util.List;
 import java.util.Collection;
 
 import java.util.Set;
-import java.util.HashSet;
 
 @Table(name="mst_users")
 @NoArgsConstructor
