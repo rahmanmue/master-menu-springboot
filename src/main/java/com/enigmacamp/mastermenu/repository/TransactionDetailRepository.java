@@ -11,7 +11,7 @@ import java.util.List;
 @Repository
 public interface TransactionDetailRepository extends JpaRepository<TransactionDetail, String> {
     @Query("Select t from TransactionDetail t where t.deleted = false")
-    List<TransactionDetailRepository> getAllTransactionDetail();
+    List<TransactionDetail> getAllTransactionDetail();
 
     @Query("Select t from TransactionDetail t where t.deleted = false and t.id = :transaction_detail_id")
     TransactionDetail getTransactionDetailById(@Param("transaction_detail_id") String transaction_detail_id);

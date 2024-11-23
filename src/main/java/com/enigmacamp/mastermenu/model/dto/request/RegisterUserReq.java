@@ -3,6 +3,7 @@ package com.enigmacamp.mastermenu.model.dto.request;
 import com.enigmacamp.mastermenu.utils.enums.ERole;
 
 import jakarta.validation.constraints.NotBlank;
+import jakarta.validation.constraints.NotEmpty;
 import jakarta.validation.constraints.NotNull;
 import jakarta.validation.constraints.Pattern;
 import jakarta.validation.constraints.Size;
@@ -24,6 +25,8 @@ public class RegisterUserReq {
     @NotNull(message = "Password cannot be null")
     @NotBlank(message = "Password cannot be blank")
     private String password;
+
+    @NotEmpty(message ="User must have at least one role")
     private ERole role;
     
 }
