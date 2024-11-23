@@ -5,10 +5,9 @@ import org.springframework.boot.test.context.SpringBootTest;
 
 @SpringBootTest
 class MastermenuApplicationTests {
-
-	@Test
-	void contextLoads() {
-		// Test context loading
-	}
+    
+    @Test
+    void contextLoads() {
+    }
 
 }
