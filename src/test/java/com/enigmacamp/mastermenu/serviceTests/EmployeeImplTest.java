@@ -1,6 +1,5 @@
 package com.enigmacamp.mastermenu.serviceTests;
 
-import com.enigmacamp.mastermenu.model.dto.request.CustomerReq;
 import com.enigmacamp.mastermenu.model.dto.request.EmployeeReq;
 import com.enigmacamp.mastermenu.model.dto.response.EmployeeDetailRes;
 import com.enigmacamp.mastermenu.model.dto.response.EmployeeRes;
