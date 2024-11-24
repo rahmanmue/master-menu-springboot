@@ -79,10 +79,10 @@ class AuthImplTest {
             .roles(Set.of(adminRole))
             .build();
 
-        Employee employee = Employee.builder()
-            .fullName("John Doe")
-            .user(savedUser)
-            .build();
+        // Employee employee = Employee.builder()
+        //     .fullName("John Doe")
+        //     .user(savedUser)
+        //     .build();
 
         when(roleRepository.findByName(ERole.ROLE_ADMIN)).thenReturn(Optional.of(adminRole));
         when(passwordEncoder.encode("password123")).thenReturn("encoded_password123");
