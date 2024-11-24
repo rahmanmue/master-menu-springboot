@@ -57,6 +57,9 @@ public class TransactionImpl implements TransactionService {
     @Override
     public TransactionListRes getTransactionById(String id) {
         Transaction transaction = transactionRepository.getTransactionById(id);
+        if (transaction == null) {
+            throw new EntityNotFoundException("Transaction Not Found");
+        }
         return modelMapper.map(transaction, TransactionListRes.class);
     }
 
@@ -102,7 +105,7 @@ public class TransactionImpl implements TransactionService {
 
         for(TransactionDetailReq transactionDetailReq : transactionReq.getTransactionDetail()){
             TransactionDetail transactionDetail = new TransactionDetail();
-            transactionDetail.setTransaction(transaction);
+            transactionDetail.setTransaction(transactionResult);
 
             // set menu
             Menu menu = menuRepository.findMenuByDeletedFalse(transactionDetailReq.getMenuId());
@@ -150,6 +153,10 @@ public class TransactionImpl implements TransactionService {
     public Order updateTransactionByOrder(OrderReq orderReq, Order existingOrder){
         Employee employee = employeeRepository.findEmployeeByDeletedFalse(orderReq.getEmployeeId());
         Transaction transaction = transactionRepository.getTransactionByOrderId(orderReq.getId());
+
+        if(transaction == null){
+            throw new EntityNotFoundException("Transaction Not Found");
+        }
         
         if(orderReq.getStatus() == EOrderStatus.COMPLETED){
             transaction.setEmployee(employee);
@@ -193,26 +200,25 @@ public class TransactionImpl implements TransactionService {
     @Transactional
     @Override
     public TransactionRes updateTransaction(TransactionReq transactionReq) {
-        Order order = orderRepository.findOrderByDeletedFalse(transactionReq.getOrderId());
         
-        if(order == null){
-            throw new EntityNotFoundException("Order with id "+ transactionReq.getOrderId() +" Not Found");
-        }
-
-        Customer customer = customerRepository.findCustomerByDeletedFalse(transactionReq.getCustomerId());
-        
-        if(customer == null){
-            throw new EntityNotFoundException("Customer with id "+ transactionReq.getCustomerId() +" Not Found");
-        }
-        
-        Employee employee = employeeRepository.findEmployeeByDeletedFalse(transactionReq.getEmployeeId());
-
-        if(employee == null){
-            throw new EntityNotFoundException("Employee with id "+ transactionReq.getEmployeeId() +" Not Found");
-        }
-
 
         if(transactionRepository.getTransactionById(transactionReq.getId()) != null){
+            Order order = orderRepository.findOrderByDeletedFalse(transactionReq.getOrderId());
+            if(order == null){
+                throw new EntityNotFoundException("Order with id "+ transactionReq.getOrderId() +" Not Found");
+            }
+
+            Customer customer = customerRepository.findCustomerByDeletedFalse(transactionReq.getCustomerId());
+            if(customer == null){
+                throw new EntityNotFoundException("Customer with id "+ transactionReq.getCustomerId() +" Not Found");
+            }
+            
+            Employee employee = employeeRepository.findEmployeeByDeletedFalse(transactionReq.getEmployeeId());
+            if(employee == null){
+                throw new EntityNotFoundException("Employee with id "+ transactionReq.getEmployeeId() +" Not Found");
+            }
+
+
             Transaction transactionResult = transactionRepository.getTransactionById(transactionReq.getId());
 
             transactionResult.setOrder(order);

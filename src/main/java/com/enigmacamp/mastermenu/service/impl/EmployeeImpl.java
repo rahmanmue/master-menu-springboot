@@ -40,7 +40,9 @@ public class EmployeeImpl implements EmployeeService {
 
         modelMapper.map(employeeReq, existingEmployee);
 
-        return modelMapper.map(existingEmployee, EmployeeRes.class);
+        Employee updatedEmployee = employeeRepository.save(existingEmployee);
+
+        return modelMapper.map(updatedEmployee, EmployeeRes.class);
     }
 
     @Override
