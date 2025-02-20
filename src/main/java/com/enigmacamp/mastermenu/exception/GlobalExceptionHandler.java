@@ -11,13 +11,25 @@ import org.springframework.web.bind.MethodArgumentNotValidException;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.RestControllerAdvice;
 import org.springframework.web.context.request.WebRequest;
+import org.springframework.web.server.ResponseStatusException;
 
 import com.enigmacamp.mastermenu.model.dto.ApiResponse;
 
+import io.jsonwebtoken.ExpiredJwtException;
 import jakarta.persistence.EntityNotFoundException;
 
 @RestControllerAdvice
 public class GlobalExceptionHandler {
+
+    @ExceptionHandler(ExpiredJwtException.class)
+    public ResponseEntity<ApiResponse<String>> handleJwtExpiredException(ExpiredJwtException ex) {
+        return new ResponseEntity<>(
+            ApiResponse.<String>builder()
+                .statusCode(HttpStatus.EARLY_HINTS.value())
+                .message("JWT Expired")
+                .build(), 
+            HttpStatus.BAD_REQUEST);
+    }
     
     @ExceptionHandler(MethodArgumentNotValidException.class)
     public ResponseEntity<ApiResponse<Map<String, String>>> handleValidationException (MethodArgumentNotValidException ex){
