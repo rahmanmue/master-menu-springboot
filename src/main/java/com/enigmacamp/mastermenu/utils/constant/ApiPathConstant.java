@@ -11,5 +11,7 @@ public class ApiPathConstant {
     public static final String CATEGORY = "/category-menu";
     public static final String ORDER = "/order";
     public static final String TRANSACTION = "/transaction";
+    public static final String WALLET = "/wallet";
+    public static final String HISTORYPAY = "/history-pay";
 
 }
