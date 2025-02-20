@@ -87,6 +87,13 @@
 			<version>1.12.529</version>
 		</dependency>
 
+		<!-- midtrans -->
+		<dependency>
+			<groupId>com.midtrans</groupId>
+			<artifactId>java-library</artifactId>
+			<version>3.0.0</version>
+		</dependency>
+
 		<!-- Testing -->
 		<dependency>
 			<groupId>org.springframework.boot</groupId>
