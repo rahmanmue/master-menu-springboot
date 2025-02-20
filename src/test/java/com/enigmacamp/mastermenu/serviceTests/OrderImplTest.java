@@ -116,14 +116,14 @@ class OrderImplTest {
     @Test
     void updateOrder() {
         when(orderRepository.findOrderByDeletedFalse("1")).thenReturn(order);
-        when(transactionService.updateTransactionByOrder(orderReq, order)).thenReturn(order);
+        when(transactionService.CancelOrCompletedTransactionByOrder(orderReq, order)).thenReturn(order);
         when(modelMapper.map(order, OrderRes.class)).thenReturn(new OrderRes());
 
         OrderRes result = orderService.updateOrder(orderReq);
 
         assertNotNull(result);
         verify(orderRepository, times(1)).findOrderByDeletedFalse("1");
-        verify(transactionService, times(1)).updateTransactionByOrder(orderReq, order);
+        verify(transactionService, times(1)).CancelOrCompletedTransactionByOrder(orderReq, order);
     }
 
     @Test
