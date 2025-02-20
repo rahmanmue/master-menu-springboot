@@ -7,6 +7,7 @@ import com.enigmacamp.mastermenu.model.dto.response.TransactionListRes;
 import com.enigmacamp.mastermenu.model.dto.response.TransactionRes;
 import com.enigmacamp.mastermenu.model.entity.Customer;
 import com.enigmacamp.mastermenu.model.entity.Employee;
+import com.enigmacamp.mastermenu.model.entity.HistoryPay;
 import com.enigmacamp.mastermenu.model.entity.Menu;
 import com.enigmacamp.mastermenu.model.entity.Order;
 import com.enigmacamp.mastermenu.model.entity.Transaction;
@@ -16,9 +17,12 @@ import com.enigmacamp.mastermenu.repository.EmployeeRepository;
 import com.enigmacamp.mastermenu.repository.MenuRepository;
 import com.enigmacamp.mastermenu.repository.OrderRepository;
 import com.enigmacamp.mastermenu.repository.TransactionRepository;
+import com.enigmacamp.mastermenu.service.HistoryPayService;
 import com.enigmacamp.mastermenu.service.TransactionDetailService;
 import com.enigmacamp.mastermenu.service.TransactionService;
 import com.enigmacamp.mastermenu.utils.enums.EOrderStatus;
+import com.enigmacamp.mastermenu.utils.enums.EPaymentStatus;
+import com.enigmacamp.mastermenu.utils.enums.EPaymentType;
 
 import jakarta.persistence.EntityNotFoundException;
 import lombok.RequiredArgsConstructor;
@@ -44,6 +48,7 @@ public class TransactionImpl implements TransactionService {
     private final OrderRepository orderRepository;
     private final CustomerRepository customerRepository;
     private final EmployeeRepository employeeRepository;
+    private final HistoryPayService historyPayService;
     private final ModelMapper modelMapper;
 
     @Override
@@ -142,6 +147,9 @@ public class TransactionImpl implements TransactionService {
         transactionResult.setTotalItem(totalItem);
         transactionResult.setTotalPrice(totalPrice);
         transactionResult.setTransactionDetail(transactionDetailList);
+    
+        // create history payment & update balance
+        historyPayService.createHistoryPayPayment(customer, totalPrice, EPaymentType.PAYMENT, EPaymentStatus.SUCCESS);
 
         Transaction savedTransaction = transactionRepository.save(transactionResult);
 
@@ -150,14 +158,18 @@ public class TransactionImpl implements TransactionService {
     }
 
     @Transactional
-    public Order updateTransactionByOrder(OrderReq orderReq, Order existingOrder){
+    public Order CancelOrCompletedTransactionByOrder(OrderReq orderReq, Order existingOrder){
         Employee employee = employeeRepository.findEmployeeByDeletedFalse(orderReq.getEmployeeId());
         Transaction transaction = transactionRepository.getTransactionByOrderId(orderReq.getId());
-
+        
         if(transaction == null){
             throw new EntityNotFoundException("Transaction Not Found");
         }
         
+        Customer customer = transaction.getCustomer();
+        int totalPrice = transaction.getTotalPrice();
+
+      
         if(orderReq.getStatus() == EOrderStatus.COMPLETED){
             transaction.setEmployee(employee);
         }else if (orderReq.getStatus() == EOrderStatus.CANCELED){
@@ -167,6 +179,10 @@ public class TransactionImpl implements TransactionService {
                 menu.setStock(menu.getStock() + quantityToReturn);  // Kembalikan stok
                 menuRepository.save(menu);  // Simpan perubahan stok pada repository
             }
+
+            // create history payment & update balance
+            historyPayService.createHistoryPayPayment(customer, totalPrice, EPaymentType.PAYMENT, EPaymentStatus.FAILED);
+
         }
 
         existingOrder.setCustomer(transaction.getCustomer());

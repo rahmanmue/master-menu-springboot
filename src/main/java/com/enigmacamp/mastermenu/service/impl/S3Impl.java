@@ -78,6 +78,7 @@ public class S3Impl implements S3Service {
         return convertedFile;
     }
 
+    @SuppressWarnings("null")
     private void validateFileFormat(MultipartFile file){
         // Pengecekan jenis file
         if(file.isEmpty()){

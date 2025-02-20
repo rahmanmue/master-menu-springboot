@@ -58,7 +58,7 @@ public class OrderImpl implements OrderService {
             throw new EntityNotFoundException("Order with id " + orderReq.getId() + " not found");
         }
 
-        Order updated = transactionService.updateTransactionByOrder(orderReq, existingOrder);
+        Order updated = transactionService.CancelOrCompletedTransactionByOrder(orderReq, existingOrder);
 
         return modelMapper.map(updated, OrderRes.class);
 

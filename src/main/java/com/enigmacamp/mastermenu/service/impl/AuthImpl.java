@@ -17,10 +17,12 @@ import com.enigmacamp.mastermenu.model.entity.Customer;
 import com.enigmacamp.mastermenu.model.entity.Employee;
 import com.enigmacamp.mastermenu.model.entity.Role;
 import com.enigmacamp.mastermenu.model.entity.User;
+import com.enigmacamp.mastermenu.model.entity.Wallet;
 import com.enigmacamp.mastermenu.repository.CustomerRepository;
 import com.enigmacamp.mastermenu.repository.EmployeeRepository;
 import com.enigmacamp.mastermenu.repository.RoleRepository;
 import com.enigmacamp.mastermenu.repository.UserRepository;
+import com.enigmacamp.mastermenu.repository.WalletRepository;
 import com.enigmacamp.mastermenu.service.AuthService;
 import com.enigmacamp.mastermenu.service.JwtService;
 import com.enigmacamp.mastermenu.utils.enums.ERole;
@@ -35,12 +37,12 @@ public class AuthImpl implements AuthService {
     private final AuthenticationManager authenticationManager;
     private final RoleRepository roleRepository;
     private final EmployeeRepository employeeRepository;
+    private final WalletRepository walletRepository;
     private final CustomerRepository customerRepository;
     private final JwtService jwtService;
 
     @Override
     public RegisterRes signUp(RegisterUserReq input){
-    
         Role userRole = roleRepository.findByName(input.getRole())
             .orElseThrow(() -> new RuntimeException("Error: Role not found."));
         
@@ -48,18 +50,19 @@ public class AuthImpl implements AuthService {
         roles.add(userRole);
 
         User user = User.builder().email(input.getEmail()).password(passwordEncoder.encode(input.getPassword())).roles(roles).build();
-        
-        User saved = userRepository.save(user);
+        User savedUser = userRepository.save(user);
         
         if(input.getRole().equals(ERole.ROLE_ADMIN)){
-            Employee employee = Employee.builder().fullName(input.getFullName()).user(saved).build();
+            Employee employee = Employee.builder().fullName(input.getFullName()).user(savedUser).build();
             employeeRepository.save(employee);
         } else if (input.getRole().equals(ERole.ROLE_USER)){
-            Customer customer = Customer.builder().fullName(input.getFullName()).user(saved).build();
+            Customer customer = Customer.builder().fullName(input.getFullName()).user(savedUser).build();
             customerRepository.save(customer);
+            Wallet wallet = Wallet.builder().user(savedUser).balance(0.00).build();
+            walletRepository.save(wallet);
         }
 
-        return RegisterRes.builder().email(saved.getUsername()).build();
+        return RegisterRes.builder().email(savedUser.getUsername()).build();
 
     }
 
