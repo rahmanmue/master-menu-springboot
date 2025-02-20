@@ -19,4 +19,6 @@ public interface CustomerRepository extends JpaRepository<Customer, String> {
     @Query("Select c from Customer c where c.deleted = false and c.id = :customer_id")
     Customer findCustomerByDeletedFalse(@Param("customer_id") String customer_id);
 
+    <Optional>Customer findByUser_Id(String userId);
+
 }
