@@ -3,10 +3,10 @@ package com.enigmacamp.mastermenu.serviceTests;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.junit.jupiter.MockitoExtension;
 
-import com.enigmacamp.mastermenu.model.dto.request.TransactionDetailReq;
-import com.enigmacamp.mastermenu.model.dto.request.TransactionReq;
-import com.enigmacamp.mastermenu.model.dto.response.TransactionListRes;
-import com.enigmacamp.mastermenu.model.dto.response.TransactionRes;
+import com.enigmacamp.mastermenu.model.dtos.transaction.TransactionDetailReq;
+import com.enigmacamp.mastermenu.model.dtos.transaction.TransactionListRes;
+import com.enigmacamp.mastermenu.model.dtos.transaction.TransactionReq;
+import com.enigmacamp.mastermenu.model.dtos.transaction.TransactionRes;
 import com.enigmacamp.mastermenu.model.entity.*;
 import com.enigmacamp.mastermenu.repository.*;
 import com.enigmacamp.mastermenu.service.TransactionDetailService;

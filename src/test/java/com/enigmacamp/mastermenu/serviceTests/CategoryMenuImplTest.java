@@ -2,9 +2,9 @@ package com.enigmacamp.mastermenu.serviceTests;
 import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.Mockito.*;
 
-import com.enigmacamp.mastermenu.model.dto.request.CategoryMenuReq;
-import com.enigmacamp.mastermenu.model.dto.response.CategoryMenuDetailRes;
-import com.enigmacamp.mastermenu.model.dto.response.CategoryMenuRes;
+import com.enigmacamp.mastermenu.model.dtos.category.CategoryMenuDetailRes;
+import com.enigmacamp.mastermenu.model.dtos.category.CategoryMenuReq;
+import com.enigmacamp.mastermenu.model.dtos.category.CategoryMenuRes;
 import com.enigmacamp.mastermenu.model.entity.CategoryMenu;
 import com.enigmacamp.mastermenu.repository.CategoryMenuRepository;
 import com.enigmacamp.mastermenu.service.impl.CategoryMenuImpl;
@@ -164,8 +164,8 @@ class CategoryMenuImplTest {
     @Test
     void updateCategoryMenu_ShouldUpdateAndReturnCategoryMenuRes() {
         // Arrange
+        String id = "1";
         CategoryMenuReq req = new CategoryMenuReq();
-        req.setId("1");
         req.setName("Updated Name");
 
         CategoryMenu existingCategory = new CategoryMenu();
@@ -184,7 +184,7 @@ class CategoryMenuImplTest {
         when(modelMapper.map(updatedCategory, CategoryMenuRes.class)).thenReturn(res);
 
         // Act
-        CategoryMenuRes result = categoryMenuService.updateCategoryMenu(req);
+        CategoryMenuRes result = categoryMenuService.updateCategoryMenu(id,req);
 
         // Assert
         assertNotNull(result);

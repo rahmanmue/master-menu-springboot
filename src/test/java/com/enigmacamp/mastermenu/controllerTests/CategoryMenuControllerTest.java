@@ -2,7 +2,7 @@ package com.enigmacamp.mastermenu.controllerTests;
 
 import com.enigmacamp.mastermenu.config.JwtAuthenticationFilter;
 import com.enigmacamp.mastermenu.controller.CategoryMenuController;
-import com.enigmacamp.mastermenu.model.dto.response.CategoryMenuDetailRes;
+import com.enigmacamp.mastermenu.model.dtos.category.CategoryMenuDetailRes;
 import com.enigmacamp.mastermenu.service.CategoryMenuService;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;

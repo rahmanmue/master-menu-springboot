@@ -1,8 +1,8 @@
 package com.enigmacamp.mastermenu.serviceTests;
 
-import com.enigmacamp.mastermenu.model.dto.request.EmployeeReq;
-import com.enigmacamp.mastermenu.model.dto.response.EmployeeDetailRes;
-import com.enigmacamp.mastermenu.model.dto.response.EmployeeRes;
+import com.enigmacamp.mastermenu.model.dtos.employee.EmployeeDetailRes;
+import com.enigmacamp.mastermenu.model.dtos.employee.EmployeeReq;
+import com.enigmacamp.mastermenu.model.dtos.employee.EmployeeRes;
 import com.enigmacamp.mastermenu.model.entity.Employee;
 import com.enigmacamp.mastermenu.repository.EmployeeRepository;
 import com.enigmacamp.mastermenu.service.impl.EmployeeImpl;
@@ -76,7 +76,6 @@ class EmployeeImplTest {
         employeeDetailRes.setFullName("John Doe");
 
         updatedEmployeeReq = new EmployeeReq();
-        updatedEmployeeReq.setId("1");
         updatedEmployeeReq.setNip("EMP543");
         updatedEmployeeReq.setFullName("John Doe");
         updatedEmployeeReq.setDateOfBirth(new Date());
@@ -112,7 +111,8 @@ class EmployeeImplTest {
 
     @Test
     void updateEmployee_ShouldUpdateAndReturnEmployeeRes() {
-        when(employeeRepository.findEmployeeByDeletedFalse("1")).thenReturn(employee);
+        String id = "1";
+        when(employeeRepository.findEmployeeByDeletedFalse(id)).thenReturn(employee);
         when(employeeRepository.save(employee)).thenReturn(updatedEmployee);
         doAnswer(invocation -> {
             EmployeeReq req = invocation.getArgument(0);
@@ -127,7 +127,7 @@ class EmployeeImplTest {
         }).when(modelMapper).map(any(EmployeeReq.class), any(Employee.class));
         when(modelMapper.map(eq(updatedEmployee), eq(EmployeeRes.class))).thenReturn(employeeRes);
 
-        EmployeeRes result = employeeService.updateEmployee(updatedEmployeeReq);
+        EmployeeRes result = employeeService.updateEmployee(id, updatedEmployeeReq);
 
         assertNotNull(result);
         assertEquals("1", result.getId());

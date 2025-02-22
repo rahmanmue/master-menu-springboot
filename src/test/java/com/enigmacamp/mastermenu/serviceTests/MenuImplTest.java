@@ -5,9 +5,9 @@ import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.ArgumentMatchers.eq;
 import static org.mockito.Mockito.*;
 
-import com.enigmacamp.mastermenu.model.dto.request.MenuReq;
-import com.enigmacamp.mastermenu.model.dto.response.MenuDetailRes;
-import com.enigmacamp.mastermenu.model.dto.response.MenuRes;
+import com.enigmacamp.mastermenu.model.dtos.menu.MenuDetailRes;
+import com.enigmacamp.mastermenu.model.dtos.menu.MenuReq;
+import com.enigmacamp.mastermenu.model.dtos.menu.MenuRes;
 import com.enigmacamp.mastermenu.model.entity.CategoryMenu;
 import com.enigmacamp.mastermenu.model.entity.Menu;
 import com.enigmacamp.mastermenu.repository.MenuRepository;
@@ -127,8 +127,8 @@ class MenuImplTest {
     @Test
     void updateMenu_ShouldUpdateAndReturnMenuRes() {
         // Arrange
+        String id = "menu1";
         MenuReq menuReq = new MenuReq();
-        menuReq.setId("menu1");
         menuReq.setName("Updated Latte");
 
         Menu existingMenu = new Menu();
@@ -154,7 +154,7 @@ class MenuImplTest {
         when(modelMapper.map(eq(updatedMenu), eq(MenuRes.class))).thenReturn(menuRes);
 
         // Act
-        MenuRes result = menuService.updateMenu(menuReq);
+        MenuRes result = menuService.updateMenu(id, menuReq);
 
         // Assert
         assertNotNull(result);

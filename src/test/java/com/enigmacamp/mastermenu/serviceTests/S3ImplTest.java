@@ -21,7 +21,7 @@ import com.amazonaws.services.s3.AmazonS3;
 import com.amazonaws.services.s3.model.DeleteObjectRequest;
 import com.amazonaws.services.s3.model.PutObjectRequest;
 import com.enigmacamp.mastermenu.exception.InvalidFileFormatException;
-import com.enigmacamp.mastermenu.model.dto.response.MenuDetailRes;
+import com.enigmacamp.mastermenu.model.dtos.menu.MenuDetailRes;
 import com.enigmacamp.mastermenu.service.MenuService;
 import com.enigmacamp.mastermenu.service.impl.S3Impl;
 

@@ -1,8 +1,8 @@
 package com.enigmacamp.mastermenu.serviceTests;
 
-import com.enigmacamp.mastermenu.model.dto.request.CustomerReq;
-import com.enigmacamp.mastermenu.model.dto.response.CustomerDetailRes;
-import com.enigmacamp.mastermenu.model.dto.response.CustomerRes;
+import com.enigmacamp.mastermenu.model.dtos.customer.CustomerDetailRes;
+import com.enigmacamp.mastermenu.model.dtos.customer.CustomerReq;
+import com.enigmacamp.mastermenu.model.dtos.customer.CustomerRes;
 import com.enigmacamp.mastermenu.model.entity.Customer;
 import com.enigmacamp.mastermenu.repository.CustomerRepository;
 import com.enigmacamp.mastermenu.service.impl.CustomerImpl;
@@ -75,7 +75,6 @@ class CustomerImplTest {
         customerDetailRes.setGender(EGender.MALE);
 
         updatedCustomerReq = new CustomerReq();
-        updatedCustomerReq.setId("1");
         updatedCustomerReq.setFullName("John Doe Updated");
         updatedCustomerReq.setDateOfBirth(new Date());
         updatedCustomerReq.setAddress("123 Main St");
@@ -158,7 +157,8 @@ class CustomerImplTest {
 
     @Test
     void updateCustomer_ShouldUpdateAndReturnCustomerRes() {
-        when(customerRepository.findCustomerByDeletedFalse("1")).thenReturn(customer);
+        String id = "1";
+        when(customerRepository.findCustomerByDeletedFalse(id)).thenReturn(customer);
         when(customerRepository.save(customer)).thenReturn(updatedCustomer);
         doAnswer(invocation -> {
             CustomerReq req = invocation.getArgument(0);
@@ -172,7 +172,7 @@ class CustomerImplTest {
         }).when(modelMapper).map(any(CustomerReq.class), any(Customer.class));
         when(modelMapper.map(eq(updatedCustomer), eq(CustomerRes.class))).thenReturn(customerRes);
         
-        CustomerRes result = customerService.updateCustomer(updatedCustomerReq);
+        CustomerRes result = customerService.updateCustomer(id, updatedCustomerReq);
 
         assertNotNull(result);
         assertEquals("1", result.getId());

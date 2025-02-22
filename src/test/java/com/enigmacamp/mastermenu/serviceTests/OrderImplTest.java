@@ -1,9 +1,9 @@
 package com.enigmacamp.mastermenu.serviceTests;
 
 
-import com.enigmacamp.mastermenu.model.dto.request.OrderReq;
-import com.enigmacamp.mastermenu.model.dto.response.OrderDetailRes;
-import com.enigmacamp.mastermenu.model.dto.response.OrderRes;
+import com.enigmacamp.mastermenu.model.dtos.order.OrderDetailRes;
+import com.enigmacamp.mastermenu.model.dtos.order.OrderReq;
+import com.enigmacamp.mastermenu.model.dtos.order.OrderRes;
 import com.enigmacamp.mastermenu.model.entity.Customer;
 import com.enigmacamp.mastermenu.model.entity.Order;
 import com.enigmacamp.mastermenu.repository.OrderRepository;
@@ -58,7 +58,6 @@ class OrderImplTest {
         order.setStatus(EOrderStatus.PROCESSING);
 
         orderReq = new OrderReq();
-        orderReq.setId("1");
         orderReq.setEmployeeId("employee1");
         orderReq.setStatus(EOrderStatus.PROCESSING);
 
@@ -115,11 +114,12 @@ class OrderImplTest {
 
     @Test
     void updateOrder() {
-        when(orderRepository.findOrderByDeletedFalse("1")).thenReturn(order);
+        String id = "1";
+        when(orderRepository.findOrderByDeletedFalse(id)).thenReturn(order);
         when(transactionService.CancelOrCompletedTransactionByOrder(orderReq, order)).thenReturn(order);
         when(modelMapper.map(order, OrderRes.class)).thenReturn(new OrderRes());
 
-        OrderRes result = orderService.updateOrder(orderReq);
+        OrderRes result = orderService.updateOrder(id, orderReq);
 
         assertNotNull(result);
         verify(orderRepository, times(1)).findOrderByDeletedFalse("1");
@@ -128,9 +128,10 @@ class OrderImplTest {
 
     @Test
     void updateOrder_NotFound() {
-        when(orderRepository.findOrderByDeletedFalse("1")).thenReturn(null);
+        String id = "1";
+        when(orderRepository.findOrderByDeletedFalse(id)).thenReturn(null);
 
-        assertThrows(EntityNotFoundException.class, () -> orderService.updateOrder(orderReq));
+        assertThrows(EntityNotFoundException.class, () -> orderService.updateOrder(id, orderReq));
     }
 
     @Test

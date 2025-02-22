@@ -20,10 +20,10 @@ import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.crypto.password.PasswordEncoder;
 
-import com.enigmacamp.mastermenu.model.dto.request.LoginUserReq;
-import com.enigmacamp.mastermenu.model.dto.request.RegisterUserReq;
-import com.enigmacamp.mastermenu.model.dto.response.LoginRes;
-import com.enigmacamp.mastermenu.model.dto.response.RegisterRes;
+import com.enigmacamp.mastermenu.model.dtos.auth.LoginRes;
+import com.enigmacamp.mastermenu.model.dtos.auth.LoginUserReq;
+import com.enigmacamp.mastermenu.model.dtos.auth.RegisterRes;
+import com.enigmacamp.mastermenu.model.dtos.auth.RegisterUserReq;
 import com.enigmacamp.mastermenu.model.entity.Employee;
 import com.enigmacamp.mastermenu.model.entity.Role;
 import com.enigmacamp.mastermenu.model.entity.User;
