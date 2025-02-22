@@ -1,8 +1,8 @@
 package com.enigmacamp.mastermenu.service.impl;
 
-import com.enigmacamp.mastermenu.model.dto.request.OrderReq;
-import com.enigmacamp.mastermenu.model.dto.response.OrderDetailRes;
-import com.enigmacamp.mastermenu.model.dto.response.OrderRes;
+import com.enigmacamp.mastermenu.model.dtos.order.OrderDetailRes;
+import com.enigmacamp.mastermenu.model.dtos.order.OrderReq;
+import com.enigmacamp.mastermenu.model.dtos.order.OrderRes;
 import com.enigmacamp.mastermenu.model.entity.Order;
 import com.enigmacamp.mastermenu.repository.OrderRepository;
 import com.enigmacamp.mastermenu.service.OrderService;
@@ -51,11 +51,11 @@ public class OrderImpl implements OrderService {
     }
 
     @Override
-    public OrderRes updateOrder(OrderReq orderReq) {
+    public OrderRes updateOrder(String id, OrderReq orderReq) {
 
-        Order existingOrder = orderRepository.findOrderByDeletedFalse(orderReq.getId());
+        Order existingOrder = orderRepository.findOrderByDeletedFalse(id);
         if(existingOrder == null){
-            throw new EntityNotFoundException("Order with id " + orderReq.getId() + " not found");
+            throw new EntityNotFoundException("Order with id " + id + " not found");
         }
 
         Order updated = transactionService.CancelOrCompletedTransactionByOrder(orderReq, existingOrder);

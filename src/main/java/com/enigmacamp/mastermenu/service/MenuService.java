@@ -1,8 +1,8 @@
 package com.enigmacamp.mastermenu.service;
 
-import com.enigmacamp.mastermenu.model.dto.request.MenuReq;
-import com.enigmacamp.mastermenu.model.dto.response.MenuDetailRes;
-import com.enigmacamp.mastermenu.model.dto.response.MenuRes;
+import com.enigmacamp.mastermenu.model.dtos.menu.MenuDetailRes;
+import com.enigmacamp.mastermenu.model.dtos.menu.MenuReq;
+import com.enigmacamp.mastermenu.model.dtos.menu.MenuRes;
 
 import java.util.List;
 
@@ -10,7 +10,7 @@ public interface MenuService {
 
     MenuRes createMenu(MenuReq menuReq);
     MenuDetailRes getMenuById(String id);
-    MenuRes updateMenu(MenuReq menuReq);
+    MenuRes updateMenu(String id, MenuReq menuReq);
     void deleteMenu(String id);
     List<MenuDetailRes> getAllMenu();
 

@@ -1,8 +1,8 @@
 package com.enigmacamp.mastermenu.service.impl;
 
-import com.enigmacamp.mastermenu.model.dto.request.MenuReq;
-import com.enigmacamp.mastermenu.model.dto.response.MenuDetailRes;
-import com.enigmacamp.mastermenu.model.dto.response.MenuRes;
+import com.enigmacamp.mastermenu.model.dtos.menu.MenuDetailRes;
+import com.enigmacamp.mastermenu.model.dtos.menu.MenuReq;
+import com.enigmacamp.mastermenu.model.dtos.menu.MenuRes;
 import com.enigmacamp.mastermenu.model.entity.CategoryMenu;
 import com.enigmacamp.mastermenu.model.entity.Menu;
 import com.enigmacamp.mastermenu.repository.MenuRepository;
@@ -44,14 +44,15 @@ public class MenuImpl implements MenuService {
     }
 
     @Override
-    public MenuRes updateMenu(MenuReq menuReq) {
-        Menu existingMenu = menuRepository.findMenuByDeletedFalse(menuReq.getId());
+    public MenuRes updateMenu(String id, MenuReq menuReq) {
+        Menu existingMenu = menuRepository.findMenuByDeletedFalse(id);
 
         if(existingMenu == null){
             throw new RuntimeException("Menu with id "+ menuReq.getId()+" Not Found");
         }
 
         modelMapper.map(menuReq, existingMenu);
+        existingMenu.setId(id);
 
         Menu updatedMenu = menuRepository.save(existingMenu);
 

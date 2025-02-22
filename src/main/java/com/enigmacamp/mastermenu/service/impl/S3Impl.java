@@ -10,7 +10,7 @@ import com.amazonaws.services.s3.AmazonS3;
 import com.amazonaws.services.s3.model.DeleteObjectRequest;
 import com.amazonaws.services.s3.model.PutObjectRequest;
 import com.enigmacamp.mastermenu.exception.InvalidFileFormatException;
-import com.enigmacamp.mastermenu.model.dto.response.MenuDetailRes;
+import com.enigmacamp.mastermenu.model.dtos.menu.MenuDetailRes;
 import com.enigmacamp.mastermenu.service.MenuService;
 import com.enigmacamp.mastermenu.service.S3Service;
 
@@ -52,8 +52,12 @@ public class S3Impl implements S3Service {
         
         MenuDetailRes menu = menuService.getMenuById(idMenu);
         String imageUrl = menu.getImageUrl();
-        String oldFileName = imageUrl.split("/")[imageUrl.split("/").length - 1];
 
+        if (file == null || file.isEmpty()) return imageUrl;
+
+        if(imageUrl == null) return uploadFile(file);
+        
+        String oldFileName = imageUrl.split("/")[imageUrl.split("/").length - 1];
         if(oldFileName != null && !oldFileName.isEmpty()){
             deleteFile(oldFileName);
         }

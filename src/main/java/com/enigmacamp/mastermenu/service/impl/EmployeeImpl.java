@@ -1,8 +1,8 @@
 package com.enigmacamp.mastermenu.service.impl;
 
-import com.enigmacamp.mastermenu.model.dto.request.EmployeeReq;
-import com.enigmacamp.mastermenu.model.dto.response.EmployeeDetailRes;
-import com.enigmacamp.mastermenu.model.dto.response.EmployeeRes;
+import com.enigmacamp.mastermenu.model.dtos.employee.EmployeeDetailRes;
+import com.enigmacamp.mastermenu.model.dtos.employee.EmployeeReq;
+import com.enigmacamp.mastermenu.model.dtos.employee.EmployeeRes;
 import com.enigmacamp.mastermenu.model.entity.Employee;
 import com.enigmacamp.mastermenu.repository.EmployeeRepository;
 import com.enigmacamp.mastermenu.service.EmployeeService;
@@ -31,14 +31,15 @@ public class EmployeeImpl implements EmployeeService {
     }
 
     @Override
-    public EmployeeRes updateEmployee(EmployeeReq employeeReq) {
-        Employee existingEmployee = employeeRepository.findEmployeeByDeletedFalse(employeeReq.getId());
+    public EmployeeRes updateEmployee(String id, EmployeeReq employeeReq) {
+        Employee existingEmployee = employeeRepository.findEmployeeByDeletedFalse(id);
 
         if( existingEmployee == null){
             throw new RuntimeException("Employee Not Found");
         }
 
         modelMapper.map(employeeReq, existingEmployee);
+        existingEmployee.setId(id);
 
         Employee updatedEmployee = employeeRepository.save(existingEmployee);
 
@@ -56,6 +57,11 @@ public class EmployeeImpl implements EmployeeService {
     @Override
     public List<EmployeeDetailRes> getEmployeeByName(String name) {
         List<Employee> employees = employeeRepository.getAllEmployeeByName(name);
+
+        if(employees.isEmpty()){
+            throw new EntityNotFoundException("Employee Not Found");
+        }
+
         return employees.stream()
             .map(employee -> modelMapper.map(employee, EmployeeDetailRes.class))
             .toList();

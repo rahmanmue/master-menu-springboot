@@ -1,8 +1,8 @@
 package com.enigmacamp.mastermenu.service.impl;
 
-import com.enigmacamp.mastermenu.model.dto.request.CategoryMenuReq;
-import com.enigmacamp.mastermenu.model.dto.response.CategoryMenuDetailRes;
-import com.enigmacamp.mastermenu.model.dto.response.CategoryMenuRes;
+import com.enigmacamp.mastermenu.model.dtos.category.CategoryMenuDetailRes;
+import com.enigmacamp.mastermenu.model.dtos.category.CategoryMenuReq;
+import com.enigmacamp.mastermenu.model.dtos.category.CategoryMenuRes;
 import com.enigmacamp.mastermenu.model.entity.CategoryMenu;
 import com.enigmacamp.mastermenu.repository.CategoryMenuRepository;
 import com.enigmacamp.mastermenu.service.CategoryMenuService;
@@ -64,14 +64,15 @@ public class CategoryMenuImpl implements CategoryMenuService {
     }
 
     @Override
-    public CategoryMenuRes updateCategoryMenu(CategoryMenuReq categoryMenuReq) {
-        CategoryMenu existingCategory = categoryMenuRepository.findCategoryMenuByDeletedFalse(categoryMenuReq.getId()); 
+    public CategoryMenuRes updateCategoryMenu(String id, CategoryMenuReq categoryMenuReq) {
+        CategoryMenu existingCategory = categoryMenuRepository.findCategoryMenuByDeletedFalse(id); 
 
         if(existingCategory == null){
-            throw new EntityNotFoundException("Category with id "+categoryMenuReq.getId()+" Not Found");
+            throw new EntityNotFoundException("Category with id "+id+" Not Found");
         }
 
         modelMapper.map(categoryMenuReq, existingCategory);
+        existingCategory.setId(id);
 
         CategoryMenu updatedCategory = categoryMenuRepository.save(existingCategory);
         return modelMapper.map(updatedCategory, CategoryMenuRes.class);

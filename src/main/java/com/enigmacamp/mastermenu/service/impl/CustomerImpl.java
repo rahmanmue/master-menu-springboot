@@ -1,8 +1,8 @@
 package com.enigmacamp.mastermenu.service.impl;
 
-import com.enigmacamp.mastermenu.model.dto.request.CustomerReq;
-import com.enigmacamp.mastermenu.model.dto.response.CustomerDetailRes;
-import com.enigmacamp.mastermenu.model.dto.response.CustomerRes;
+import com.enigmacamp.mastermenu.model.dtos.customer.CustomerDetailRes;
+import com.enigmacamp.mastermenu.model.dtos.customer.CustomerReq;
+import com.enigmacamp.mastermenu.model.dtos.customer.CustomerRes;
 import com.enigmacamp.mastermenu.model.entity.Customer;
 import com.enigmacamp.mastermenu.repository.CustomerRepository;
 import com.enigmacamp.mastermenu.service.CustomerService;
@@ -63,14 +63,15 @@ public class CustomerImpl implements CustomerService {
     }
 
     @Override
-    public CustomerRes updateCustomer(CustomerReq customerReq) {
-        Customer existingCustomer = customerRepository.findCustomerByDeletedFalse(customerReq.getId());
+    public CustomerRes updateCustomer(String id, CustomerReq customerReq) {
+        Customer existingCustomer = customerRepository.findCustomerByDeletedFalse(id);
 
         if(existingCustomer == null){
-            throw new EntityNotFoundException("Customer with id "+customerReq.getId()+" Not Found");
+            throw new EntityNotFoundException("Customer with id "+id+" Not Found");
         }
 
         modelMapper.map(customerReq, existingCustomer);
+        existingCustomer.setId(id);
 
         Customer updated = customerRepository.save(existingCustomer);
 

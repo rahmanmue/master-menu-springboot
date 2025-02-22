@@ -1,13 +1,12 @@
 package com.enigmacamp.mastermenu.service.impl;
 
-import com.enigmacamp.mastermenu.model.dto.request.OrderReq;
-import com.enigmacamp.mastermenu.model.dto.request.TransactionDetailReq;
-import com.enigmacamp.mastermenu.model.dto.request.TransactionReq;
-import com.enigmacamp.mastermenu.model.dto.response.TransactionListRes;
-import com.enigmacamp.mastermenu.model.dto.response.TransactionRes;
+import com.enigmacamp.mastermenu.model.dtos.order.OrderReq;
+import com.enigmacamp.mastermenu.model.dtos.transaction.TransactionDetailReq;
+import com.enigmacamp.mastermenu.model.dtos.transaction.TransactionListRes;
+import com.enigmacamp.mastermenu.model.dtos.transaction.TransactionReq;
+import com.enigmacamp.mastermenu.model.dtos.transaction.TransactionRes;
 import com.enigmacamp.mastermenu.model.entity.Customer;
 import com.enigmacamp.mastermenu.model.entity.Employee;
-import com.enigmacamp.mastermenu.model.entity.HistoryPay;
 import com.enigmacamp.mastermenu.model.entity.Menu;
 import com.enigmacamp.mastermenu.model.entity.Order;
 import com.enigmacamp.mastermenu.model.entity.Transaction;
@@ -35,7 +34,6 @@ import java.sql.Date;
 import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.List;
-
 
 
 @Service
@@ -160,7 +158,7 @@ public class TransactionImpl implements TransactionService {
     @Transactional
     public Order CancelOrCompletedTransactionByOrder(OrderReq orderReq, Order existingOrder){
         Employee employee = employeeRepository.findEmployeeByDeletedFalse(orderReq.getEmployeeId());
-        Transaction transaction = transactionRepository.getTransactionByOrderId(orderReq.getId());
+        Transaction transaction = transactionRepository.getTransactionByOrderId(existingOrder.getId());
         
         if(transaction == null){
             throw new EntityNotFoundException("Transaction Not Found");

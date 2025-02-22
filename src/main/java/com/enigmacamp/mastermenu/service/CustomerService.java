@@ -1,8 +1,8 @@
 package com.enigmacamp.mastermenu.service;
 
-import com.enigmacamp.mastermenu.model.dto.request.CustomerReq;
-import com.enigmacamp.mastermenu.model.dto.response.CustomerDetailRes;
-import com.enigmacamp.mastermenu.model.dto.response.CustomerRes;
+import com.enigmacamp.mastermenu.model.dtos.customer.CustomerDetailRes;
+import com.enigmacamp.mastermenu.model.dtos.customer.CustomerReq;
+import com.enigmacamp.mastermenu.model.dtos.customer.CustomerRes;
 
 import java.util.List;
 
@@ -11,6 +11,6 @@ public interface CustomerService {
     CustomerDetailRes getCustomerById(String id);
     List<CustomerDetailRes> getAllCustomers();
     List<CustomerDetailRes> getAllCustomersByName(String name);
-    CustomerRes updateCustomer(CustomerReq customerReq);
+    CustomerRes updateCustomer(String id, CustomerReq customerReq);
     void deleteCustomer(String id);
 }

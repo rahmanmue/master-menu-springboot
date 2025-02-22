@@ -1,10 +1,8 @@
 package com.enigmacamp.mastermenu.service;
 
-import com.enigmacamp.mastermenu.model.dto.request.TransactionReq;
-import com.enigmacamp.mastermenu.model.dto.response.TransactionRes;
-import com.enigmacamp.mastermenu.model.dto.response.TransactionListRes;
-
-
+import com.enigmacamp.mastermenu.model.dtos.transaction.TransactionListRes;
+import com.enigmacamp.mastermenu.model.dtos.transaction.TransactionReq;
+import com.enigmacamp.mastermenu.model.dtos.transaction.TransactionRes;
 
 import java.util.List;
 
