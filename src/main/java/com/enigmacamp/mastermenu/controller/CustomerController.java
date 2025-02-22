@@ -1,9 +1,9 @@
 package com.enigmacamp.mastermenu.controller;
 
-import com.enigmacamp.mastermenu.model.dto.ApiResponse;
-import com.enigmacamp.mastermenu.model.dto.request.CustomerReq;
-import com.enigmacamp.mastermenu.model.dto.response.CustomerDetailRes;
-import com.enigmacamp.mastermenu.model.dto.response.CustomerRes;
+import com.enigmacamp.mastermenu.model.dtos.ApiResponse;
+import com.enigmacamp.mastermenu.model.dtos.customer.CustomerDetailRes;
+import com.enigmacamp.mastermenu.model.dtos.customer.CustomerReq;
+import com.enigmacamp.mastermenu.model.dtos.customer.CustomerRes;
 import com.enigmacamp.mastermenu.service.CustomerService;
 import com.enigmacamp.mastermenu.utils.constant.ApiPathConstant;
 
@@ -12,6 +12,7 @@ import lombok.RequiredArgsConstructor;
 
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -48,7 +49,7 @@ public class CustomerController {
         );
     }
 
-    @GetMapping(value = "/{id}")
+    @GetMapping("/{id}")
     public ResponseEntity<ApiResponse<CustomerDetailRes>> getCustomerById(@PathVariable String id) {
         CustomerDetailRes customer = customerService.getCustomerById(id);
 
@@ -62,7 +63,9 @@ public class CustomerController {
         );
     }
 
+    // Not Use Only Use on Registered but use service not controller
     @PostMapping
+    @PreAuthorize("hasRole('ADMIN')")
     public ResponseEntity<ApiResponse<CustomerRes>> createCustomer(@Valid @RequestBody CustomerReq customerReq) {
         CustomerRes savedCustumer =  customerService.saveCustomer(customerReq); 
         
@@ -76,9 +79,10 @@ public class CustomerController {
         );
     }
 
-    @PutMapping
-    public ResponseEntity<ApiResponse<CustomerRes>> updateCustomer(@Valid @RequestBody CustomerReq customerReq) {
-        CustomerRes updatedCustomer = customerService.updateCustomer(customerReq);
+    @PatchMapping("/{id}")
+    @PreAuthorize("hasRole('USER')")
+    public ResponseEntity<ApiResponse<CustomerRes>> updateCustomer(@PathVariable String id, @Valid @RequestBody CustomerReq customerReq) {
+        CustomerRes updatedCustomer = customerService.updateCustomer(id, customerReq);
         return new ResponseEntity<>(
             ApiResponse.<CustomerRes>builder()
                 .statusCode(HttpStatus.OK.value())
@@ -89,7 +93,8 @@ public class CustomerController {
         );
     }
 
-    @DeleteMapping(value = "/{id}")
+    @DeleteMapping("/{id}")
+    @PreAuthorize("hasRole('ADMIN')")
     public ResponseEntity<ApiResponse<String>> deleteCustomer(@PathVariable String id) {
         customerService.deleteCustomer(id);
 

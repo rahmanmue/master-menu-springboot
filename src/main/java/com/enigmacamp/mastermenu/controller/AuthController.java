@@ -8,11 +8,11 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
-import com.enigmacamp.mastermenu.model.dto.ApiResponse;
-import com.enigmacamp.mastermenu.model.dto.request.LoginUserReq;
-import com.enigmacamp.mastermenu.model.dto.request.RegisterUserReq;
-import com.enigmacamp.mastermenu.model.dto.response.LoginRes;
-import com.enigmacamp.mastermenu.model.dto.response.RegisterRes;
+import com.enigmacamp.mastermenu.model.dtos.ApiResponse;
+import com.enigmacamp.mastermenu.model.dtos.auth.LoginRes;
+import com.enigmacamp.mastermenu.model.dtos.auth.LoginUserReq;
+import com.enigmacamp.mastermenu.model.dtos.auth.RegisterRes;
+import com.enigmacamp.mastermenu.model.dtos.auth.RegisterUserReq;
 import com.enigmacamp.mastermenu.service.AuthService;
 import com.enigmacamp.mastermenu.utils.constant.ApiPathConstant;
 

@@ -1,9 +1,9 @@
 package com.enigmacamp.mastermenu.controller;
 
-import com.enigmacamp.mastermenu.model.dto.ApiResponse;
-import com.enigmacamp.mastermenu.model.dto.request.CategoryMenuReq;
-import com.enigmacamp.mastermenu.model.dto.response.CategoryMenuDetailRes;
-import com.enigmacamp.mastermenu.model.dto.response.CategoryMenuRes;
+import com.enigmacamp.mastermenu.model.dtos.ApiResponse;
+import com.enigmacamp.mastermenu.model.dtos.category.CategoryMenuDetailRes;
+import com.enigmacamp.mastermenu.model.dtos.category.CategoryMenuReq;
+import com.enigmacamp.mastermenu.model.dtos.category.CategoryMenuRes;
 import com.enigmacamp.mastermenu.service.CategoryMenuService;
 import com.enigmacamp.mastermenu.utils.constant.ApiPathConstant;
 
@@ -21,7 +21,6 @@ import java.util.List;
 @RequiredArgsConstructor
 @RequestMapping(ApiPathConstant.API+ ApiPathConstant.VERSION + ApiPathConstant.CATEGORY)
 public class CategoryMenuController {
-
     private final CategoryMenuService categoryMenuService;
 
     @GetMapping
@@ -80,10 +79,10 @@ public class CategoryMenuController {
         );
     }
 
-    @PutMapping
+    @PatchMapping("/{id}")
     @PreAuthorize("hasRole('ADMIN')")
-    public ResponseEntity<ApiResponse<CategoryMenuRes>> updateCategoryMenu(@Valid @RequestBody CategoryMenuReq categoryMenuReq) {
-        CategoryMenuRes updatedCategory = categoryMenuService.updateCategoryMenu(categoryMenuReq);
+    public ResponseEntity<ApiResponse<CategoryMenuRes>> updateCategoryMenu(@PathVariable String id, @Valid @RequestBody CategoryMenuReq categoryMenuReq) {
+        CategoryMenuRes updatedCategory = categoryMenuService.updateCategoryMenu(id, categoryMenuReq);
 
         return new ResponseEntity<>(
             ApiResponse.<CategoryMenuRes>builder()

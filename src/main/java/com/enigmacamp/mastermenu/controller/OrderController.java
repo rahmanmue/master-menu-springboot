@@ -1,9 +1,9 @@
 package com.enigmacamp.mastermenu.controller;
 
-import com.enigmacamp.mastermenu.model.dto.ApiResponse;
-import com.enigmacamp.mastermenu.model.dto.request.OrderReq;
-import com.enigmacamp.mastermenu.model.dto.response.OrderDetailRes;
-import com.enigmacamp.mastermenu.model.dto.response.OrderRes;
+import com.enigmacamp.mastermenu.model.dtos.ApiResponse;
+import com.enigmacamp.mastermenu.model.dtos.order.OrderDetailRes;
+import com.enigmacamp.mastermenu.model.dtos.order.OrderReq;
+import com.enigmacamp.mastermenu.model.dtos.order.OrderRes;
 import com.enigmacamp.mastermenu.service.OrderService;
 import com.enigmacamp.mastermenu.utils.constant.ApiPathConstant;
 
@@ -12,6 +12,7 @@ import lombok.RequiredArgsConstructor;
 
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -24,6 +25,7 @@ public class OrderController {
     private final OrderService orderService;
 
     @GetMapping
+    @PreAuthorize("hasRole('ADMIN')")
     public ResponseEntity<ApiResponse<List<OrderDetailRes>>> getAllOrder() {
         return new ResponseEntity<>(
             ApiResponse.<List<OrderDetailRes>>builder()
@@ -36,6 +38,7 @@ public class OrderController {
     }
 
     @GetMapping("/status")
+    @PreAuthorize("hasRole('ADMIN')")
     public ResponseEntity<ApiResponse<List<OrderDetailRes>>> getAllOrderByStatus(@RequestParam(name = "status") String status) {
         List<OrderDetailRes> orders = orderService.getOrderByStatus(status.toUpperCase());
         return new ResponseEntity<>(
@@ -63,6 +66,7 @@ public class OrderController {
 
 
     @GetMapping("/{id}")
+    @PreAuthorize("hasRole('ADMIN')")
     public ResponseEntity<ApiResponse<OrderDetailRes>> getOrderById(@PathVariable String id) {
         OrderDetailRes order = orderService.getOrderById(id);
 
@@ -76,9 +80,10 @@ public class OrderController {
             );
     }
 
-    @PutMapping
-    public ResponseEntity<ApiResponse<OrderRes>> updateOrder(@Valid @RequestBody OrderReq orderReq) {
-        OrderRes updated = orderService.updateOrder(orderReq);
+    @PutMapping("/{id}")
+    @PreAuthorize("hasRole('ADMIN')")
+    public ResponseEntity<ApiResponse<OrderRes>> updateOrder(@PathVariable String id, @Valid @RequestBody OrderReq orderReq) {
+        OrderRes updated = orderService.updateOrder(id, orderReq);
 
         return new ResponseEntity<>(
             ApiResponse.<OrderRes>builder()

@@ -1,9 +1,9 @@
 package com.enigmacamp.mastermenu.controller;
 
-import com.enigmacamp.mastermenu.model.dto.ApiResponse;
-import com.enigmacamp.mastermenu.model.dto.request.MenuReq;
-import com.enigmacamp.mastermenu.model.dto.response.MenuDetailRes;
-import com.enigmacamp.mastermenu.model.dto.response.MenuRes;
+import com.enigmacamp.mastermenu.model.dtos.ApiResponse;
+import com.enigmacamp.mastermenu.model.dtos.menu.MenuDetailRes;
+import com.enigmacamp.mastermenu.model.dtos.menu.MenuReq;
+import com.enigmacamp.mastermenu.model.dtos.menu.MenuRes;
 import com.enigmacamp.mastermenu.service.MenuService;
 import com.enigmacamp.mastermenu.service.S3Service;
 import com.enigmacamp.mastermenu.utils.constant.ApiPathConstant;
@@ -17,7 +17,7 @@ import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
-import org.springframework.web.bind.annotation.PostMapping;
+
 import org.springframework.web.multipart.MultipartFile;
 
 
@@ -88,16 +88,18 @@ public class MenuController {
         );
     }
 
-    @PutMapping
+    @PatchMapping("/{id}")
     @PreAuthorize("hasRole('ADMIN')")
     public ResponseEntity<ApiResponse<MenuRes>> updateMenu(
-        @RequestParam("file") MultipartFile file,
+        @PathVariable String id,
+        @RequestParam(value ="file", required = false) MultipartFile file,
         @ModelAttribute @Valid MenuReq menuReq) {
         
-        String newImageUrl = s3Service.updateFile(file, menuReq.getId());
+        String newImageUrl = s3Service.updateFile(file, id);
         menuReq.setImageUrl(newImageUrl);
+        
 
-        MenuRes updated = menuService.updateMenu(menuReq);
+        MenuRes updated = menuService.updateMenu(id, menuReq);
         return new ResponseEntity<>(
             ApiResponse.<MenuRes>builder()
                 .statusCode(HttpStatus.OK.value())
@@ -128,11 +130,11 @@ public class MenuController {
         );
     }
 
-    @PostMapping("/upload")
-    public String postImage(@RequestParam("file") MultipartFile file) {
-        String url = s3Service.uploadFile(file);
-        return url;
-    }
+    // @PostMapping("/upload")
+    // public String postImage(@RequestParam("file") MultipartFile file) {
+    //     String url = s3Service.uploadFile(file);
+    //     return url;
+    // }
     
 
 

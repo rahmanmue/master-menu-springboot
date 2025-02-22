@@ -1,9 +1,9 @@
 package com.enigmacamp.mastermenu.controller;
 
-import com.enigmacamp.mastermenu.model.dto.ApiResponse;
-import com.enigmacamp.mastermenu.model.dto.request.TransactionReq;
-import com.enigmacamp.mastermenu.model.dto.response.TransactionListRes;
-import com.enigmacamp.mastermenu.model.dto.response.TransactionRes;
+import com.enigmacamp.mastermenu.model.dtos.ApiResponse;
+import com.enigmacamp.mastermenu.model.dtos.transaction.TransactionListRes;
+import com.enigmacamp.mastermenu.model.dtos.transaction.TransactionReq;
+import com.enigmacamp.mastermenu.model.dtos.transaction.TransactionRes;
 import com.enigmacamp.mastermenu.service.TransactionService;
 import com.enigmacamp.mastermenu.utils.constant.ApiPathConstant;
 

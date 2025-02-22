@@ -1,9 +1,9 @@
 package com.enigmacamp.mastermenu.controller;
 
-import com.enigmacamp.mastermenu.model.dto.ApiResponse;
-import com.enigmacamp.mastermenu.model.dto.request.EmployeeReq;
-import com.enigmacamp.mastermenu.model.dto.response.EmployeeDetailRes;
-import com.enigmacamp.mastermenu.model.dto.response.EmployeeRes;
+import com.enigmacamp.mastermenu.model.dtos.ApiResponse;
+import com.enigmacamp.mastermenu.model.dtos.employee.EmployeeDetailRes;
+import com.enigmacamp.mastermenu.model.dtos.employee.EmployeeReq;
+import com.enigmacamp.mastermenu.model.dtos.employee.EmployeeRes;
 import com.enigmacamp.mastermenu.service.EmployeeService;
 import com.enigmacamp.mastermenu.utils.constant.ApiPathConstant;
 
@@ -12,6 +12,7 @@ import lombok.RequiredArgsConstructor;
 
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -19,6 +20,7 @@ import java.util.List;
 @RestController
 @RequiredArgsConstructor
 @RequestMapping(ApiPathConstant.API+ ApiPathConstant.VERSION + ApiPathConstant.EMPLOYEE)
+@PreAuthorize("hasRole('ADMIN')")
 public class EmployeeController {
 
     private final EmployeeService employeeService;
@@ -104,9 +106,9 @@ public class EmployeeController {
         );
     }
 
-    @PutMapping
-    public ResponseEntity<ApiResponse<EmployeeRes>> updateEmployee(@Valid @RequestBody EmployeeReq employee) {
-        EmployeeRes updatedEmployee = employeeService.updateEmployee(employee);
+    @PatchMapping("/{id}")
+    public ResponseEntity<ApiResponse<EmployeeRes>> updateEmployee(@PathVariable String id, @Valid @RequestBody EmployeeReq employee) {
+        EmployeeRes updatedEmployee = employeeService.updateEmployee(id, employee);
         return new ResponseEntity<>(
             ApiResponse.<EmployeeRes>builder()
                 .statusCode(HttpStatus.OK.value())
