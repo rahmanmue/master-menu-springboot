@@ -13,9 +13,8 @@ import org.springframework.web.bind.MethodArgumentNotValidException;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.RestControllerAdvice;
 import org.springframework.web.context.request.WebRequest;
-import org.springframework.web.server.ResponseStatusException;
 
-import com.enigmacamp.mastermenu.model.dtos.ApiResponse;
+import com.enigmacamp.mastermenu.model.dtos.ApiResponseError;
 import com.midtrans.httpclient.error.MidtransError;
 
 import io.jsonwebtoken.ExpiredJwtException;
@@ -25,33 +24,30 @@ import jakarta.persistence.EntityNotFoundException;
 public class GlobalExceptionHandler {
 
     @ExceptionHandler(ExpiredJwtException.class)
-    public ResponseEntity<ApiResponse<String>> handleJwtExpiredException(ExpiredJwtException ex) {
+    public ResponseEntity<ApiResponseError<String>> handleJwtExpiredException(ExpiredJwtException ex) {
         return new ResponseEntity<>(
-            ApiResponse.<String>builder()
+            ApiResponseError.<String>builder()
                 .statusCode(HttpStatus.UNAUTHORIZED.value())
-                .message("JWT Expired")
+                .errors("JWT Expired " + ex.getMessage())
                 .build(), 
             HttpStatus.UNAUTHORIZED);
     }
 
-    // @ExceptionHandler(RuntimeException.class)
-    // public ResponseEntity<Object> handleMidtransError(RuntimeException ex){
-    //     Map<String, Object> body = new HashMap<>();
-    //     body.put("timestamp", LocalDateTime.now());
-    //     body.put("message", "Midtrans error occurred: " + ex.getMessage());
-    //     return new ResponseEntity<>(body,HttpStatus.BAD_REQUEST);
-    // }
-
+  
     @ExceptionHandler(MidtransError.class)
-    public ResponseEntity<Object> handleMidtransError(MidtransError err){
-        Map<String, Object> body = new HashMap<>();
-        body.put("timestamp", LocalDateTime.now());
-        body.put("message", "Midtrans error occurred: " + err.getMessage());
-        return new ResponseEntity<>(body,HttpStatus.BAD_REQUEST);
+    public ResponseEntity<ApiResponseError<String>> handleMidtransError(MidtransError err){
+            int statusCode = err.getStatusCode();
+
+            return new ResponseEntity<>(
+                ApiResponseError.<String>builder()
+                    .statusCode(HttpStatus.valueOf(statusCode).value())
+                    .errors(err.getLocalizedMessage())
+                    .build(),
+                HttpStatus.valueOf(statusCode));
     }
     
     @ExceptionHandler(MethodArgumentNotValidException.class)
-    public ResponseEntity<ApiResponse<Map<String, String>>> handleValidationException (MethodArgumentNotValidException ex){
+    public ResponseEntity<ApiResponseError<Map<String, String>>> handleValidationException (MethodArgumentNotValidException ex){
         
         Map<String, String> errors = new HashMap<>();
 
@@ -63,68 +59,64 @@ public class GlobalExceptionHandler {
 
       
         return new ResponseEntity<>(
-            ApiResponse.<Map<String, String>>builder()
+            ApiResponseError.<Map<String, String>>builder()
                 .statusCode(HttpStatus.BAD_REQUEST.value())
-                .message("Validation failed")
-                .data(errors)
+                .errors(errors)
                 .build(), 
             HttpStatus.BAD_REQUEST);
     }
 
     @ExceptionHandler(HttpMessageNotReadableException.class)
-    public ResponseEntity<ApiResponse<String>> handleHttpMessageNotReadableException(HttpMessageNotReadableException ex){
+    public ResponseEntity<ApiResponseError<String>> handleHttpMessageNotReadableException(HttpMessageNotReadableException ex){
         
         return new ResponseEntity<>(
-            ApiResponse.<String>builder()
+            ApiResponseError.<String>builder()
                 .statusCode(HttpStatus.BAD_REQUEST.value())
-                .message("Invalid input data type")
-                .data( ex.getLocalizedMessage())
+                .errors("Invalid input data type " + ex.getLocalizedMessage())
                 .build(),
             HttpStatus.BAD_REQUEST);
     }
 
     @ExceptionHandler(EntityNotFoundException.class)
-    public ResponseEntity<ApiResponse<String>> handleHEntityNotFoundException(EntityNotFoundException ex){
+    public ResponseEntity<ApiResponseError<String>> handleHEntityNotFoundException(EntityNotFoundException ex){
         
         return new ResponseEntity<>(
-            ApiResponse.<String>builder()
+            ApiResponseError.<String>builder()
                 .statusCode(HttpStatus.NOT_FOUND.value())
-                .message(ex.getMessage())
+                .errors(ex.getMessage())
                 .build(),
             HttpStatus.NOT_FOUND);
     }
 
     @ExceptionHandler(InvalidFileFormatException.class)
-    public ResponseEntity<ApiResponse<String>> handleInvalidFileFormatException(InvalidFileFormatException ex, WebRequest request) {
+    public ResponseEntity<ApiResponseError<String>> handleInvalidFileFormatException(InvalidFileFormatException ex, WebRequest request) {
         return new ResponseEntity<>(
-            ApiResponse.<String>builder()
+            ApiResponseError.<String>builder()
                 .statusCode(HttpStatus.BAD_REQUEST.value())
-                .message("An error occured")
-                .data(ex.getMessage())
+                .errors("An error occured " + ex.getMessage())
                 .build(),
             HttpStatus.BAD_REQUEST);
     }
 
     @ExceptionHandler(AccessDeniedException.class)
-    public ResponseEntity<ApiResponse<String>> handleAccesDenied(AccessDeniedException ex){
+    public ResponseEntity<ApiResponseError<String>> handleAccesDenied(AccessDeniedException ex){
        
         return new ResponseEntity<>(
-            ApiResponse.<String>builder()
+            ApiResponseError.<String>builder()
                 .statusCode(HttpStatus.FORBIDDEN.value())
-                .message(ex.getMessage())
+                .errors(ex.getMessage())
                 .build(),
             HttpStatus.FORBIDDEN);
     }
 
 
     @ExceptionHandler(Exception.class)
-    public ResponseEntity<ApiResponse<String>> handleGlobalExceptions(Exception ex){
+    public ResponseEntity<ApiResponseError<String>> handleGlobalExceptions(Exception ex){
         System.out.println(ex);
         return new ResponseEntity<>(
-            ApiResponse.<String>builder()
+            ApiResponseError.<String>builder()
                 .statusCode(HttpStatus.INTERNAL_SERVER_ERROR.value())
-                .message("An error occured")
-                .data(ex.getMessage())
+                .errors("An error occured "+ ex.getMessage())
                 .build(),
             HttpStatus.INTERNAL_SERVER_ERROR);
     }

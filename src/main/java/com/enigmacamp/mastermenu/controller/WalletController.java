@@ -13,9 +13,6 @@ import lombok.RequiredArgsConstructor;
 import com.enigmacamp.mastermenu.utils.constant.ApiPathConstant;
 import com.midtrans.httpclient.error.MidtransError;
 
-
-import java.time.LocalDateTime;
-import java.util.HashMap;
 import java.util.Map;
 
 import org.springframework.http.HttpStatus;
@@ -48,29 +45,17 @@ public class WalletController {
     }
 
     @PostMapping("/topup")
-    public ResponseEntity<ApiResponse<Map<String, Object>>> topUp(@AuthenticationPrincipal UserDetails userDetails, @RequestParam Double amount) {
-        try {
-            Map<String, Object> data = paymentService.createTopUpTransaction(userDetails.getUsername(), amount); 
-            return new ResponseEntity<>(
-                ApiResponse.<Map<String, Object>>builder()
-                    .statusCode(HttpStatus.OK.value())
-                    .message("Success")
-                    .data(data)
-                    .build(),
-                    HttpStatus.OK
-                );
-        } catch (MidtransError e) {
-            Map<String, Object> errorMessage = new HashMap<>();
-            errorMessage.put("timestamp :", LocalDateTime.now());
-            errorMessage.put("message", e.getMessage());
-            return new ResponseEntity<>(
-                ApiResponse.<Map<String, Object>>builder()
-                    .statusCode(HttpStatus.BAD_REQUEST.value())
-                    .message("Failed")
-                    .data(errorMessage)
-                    .build(),
-                HttpStatus.BAD_REQUEST);
-        }
+    public ResponseEntity<ApiResponse<Map<String, Object>>> topUp(@AuthenticationPrincipal UserDetails userDetails, @RequestParam Double amount) throws MidtransError{
+
+        Map<String, Object> data = paymentService.createTopUpTransaction(userDetails.getUsername(), amount); 
+        return new ResponseEntity<>(
+            ApiResponse.<Map<String, Object>>builder()
+                .statusCode(HttpStatus.OK.value())
+                .message("Success")
+                .data(data)
+                .build(),
+                HttpStatus.OK
+            );
        
     }
 
